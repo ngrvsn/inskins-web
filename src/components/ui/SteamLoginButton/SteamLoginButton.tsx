@@ -18,7 +18,7 @@ export const SteamLoginButton = ({
       className={`${styles.steamButton} ${className || ''}`}
       onClick={onClick}
     >
-      <Image src={steamButton} alt='Steam' width={16} height={16} />
+      <Image src={steamButton} alt='Steam' width={26} height={16} />
       Войти через Steam
     </button>
   )

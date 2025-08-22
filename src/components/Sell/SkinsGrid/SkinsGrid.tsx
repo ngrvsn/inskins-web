@@ -199,7 +199,11 @@ export const SkinsGrid = ({
   return (
     <div className={styles.container}>
       {/* Панель фильтров */}
-      <div className={styles.filterPanel}>
+      <div
+        className={`${styles.filterPanel} ${
+          !isAuthenticated ? styles.disabled : ''
+        }`}
+      >
         <GameSelector
           value={filters.game}
           onChange={handleGameChange}
@@ -226,7 +230,9 @@ export const SkinsGrid = ({
       {/* Сетка скинов или сообщение об авторизации */}
       <div className={styles.skinsGrid}>
         {!isAuthenticated ? (
-          <AuthPrompt onLogin={onLogin || (() => {})} />
+          <div className={styles.authPrompt}>
+            <AuthPrompt onLogin={onLogin || (() => {})} />
+          </div>
         ) : (
           filteredSkins.map((skin) => (
             <div

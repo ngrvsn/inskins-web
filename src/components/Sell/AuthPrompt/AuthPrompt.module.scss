@@ -2,10 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-  padding: 40px;
-  border-radius: 16px;
-  background: rgba(19, 20, 25, 0.6);
 }
 
 .content {
@@ -13,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 9px;
 }
 
 .icon {

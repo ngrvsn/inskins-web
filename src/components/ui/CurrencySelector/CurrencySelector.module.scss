@@ -11,7 +11,7 @@
   border-radius: 14px;
   border: 1px solid #141414;
   background: #131419;
-  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.10) inset;
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.1) inset;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
@@ -38,17 +38,11 @@
   font-weight: 500;
 }
 
-.arrow {
-  font-size: 10px;
+.dropdownIcon {
   transition: transform 0.2s ease;
-  margin-left: auto;
 
-  &.up {
-    transform: rotate(0deg);
-  }
-
-  &.down {
-    transform: rotate(0deg);
+  &.rotated {
+    transform: rotate(180deg);
   }
 }
 
@@ -58,7 +52,7 @@
   left: 0;
   right: 0;
   border-radius: 14px;
-  background: rgba(19, 20, 25, 0.90);
+  background: rgba(19, 20, 25, 0.9);
   backdrop-filter: blur(4.5px);
   border: 1px solid #141414;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);

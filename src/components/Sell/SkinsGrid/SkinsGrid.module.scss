@@ -24,6 +24,13 @@
   padding: 12px;
   border-radius: 16px;
   background: rgba(19, 20, 25, 0.6);
+
+  // Центрирование для AuthPrompt
+  &:has(.authPrompt) {
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
 }
 
 .skinCardWrapper {
@@ -48,4 +55,11 @@
   transform: translate(-50%, -50%);
   z-index: 2;
   pointer-events: none;
+}
+
+.authPrompt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
