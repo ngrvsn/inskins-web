@@ -1,0 +1,254 @@
+.filtersPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  background: transparent;
+  width: 280px;
+  height: fit-content;
+}
+
+.title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22px;
+  margin: 0 0 24px 0;
+}
+
+.resetButton {
+  display: flex;
+  padding: 7px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #18191c;
+  border: none;
+  color: #49aa19;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 24px;
+
+  &:hover {
+    background: #1f2024;
+  }
+}
+
+// Сворачивающиеся секции
+.collapsibleSection {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.sectionTitle {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.dropdownIcon {
+  transition: transform 0.2s ease;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.sectionContent {
+  padding-bottom: 16px;
+}
+
+// Стили для диапазона цен
+.priceRange {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priceInputWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.priceInput {
+  width: 100%;
+  background: #18191c;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  padding: 8px 20px 8px 8px;
+  font-size: 14px;
+  font-weight: 400;
+  outline: none;
+
+  &:focus {
+    background: #1f2024;
+  }
+}
+
+.currency {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.separator {
+  color: #fff;
+  font-size: 14px;
+}
+
+.sliderContainer {
+  position: relative;
+  height: 20px;
+  margin: 8px 0;
+}
+
+.sliderTrack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.sliderRange {
+  position: absolute;
+  height: 100%;
+  background: #49aa19;
+  border-radius: 2px;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  pointer-events: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #0a0b0f;
+    border: 2px solid #49aa19;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 2;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #0a0b0f;
+    border: 2px solid #49aa19;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+  }
+}
+
+.sliderMax {
+  z-index: 1;
+}
+
+// Стили для чекбоксов
+.checkboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+
+  &:checked {
+    background: #49aa19;
+    border-color: #49aa19;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.checkboxText {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .filtersPanel {
+    width: 100%;
+  }
+}

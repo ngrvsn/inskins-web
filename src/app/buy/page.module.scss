@@ -1,0 +1,57 @@
+.buyPage {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.content {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+  align-items: flex-start;
+}
+
+.leftColumn {
+  flex: 0 0 280px;
+  position: sticky;
+  top: 20px;
+}
+
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Адаптивность
+@media (max-width: 1200px) {
+  .content {
+    gap: 20px;
+  }
+
+  .leftColumn {
+    flex: 0 0 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .buyPage {
+    padding: 0 15px;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .leftColumn {
+    flex: none;
+    position: static;
+    width: 100%;
+  }
+
+  .rightColumn {
+    width: 100%;
+  }
+}
