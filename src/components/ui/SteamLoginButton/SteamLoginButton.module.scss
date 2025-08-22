@@ -1,0 +1,23 @@
+.steamButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #49aa19;
+  border: none;
+  border-radius: 16px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #3d8f15;
+  }
+
+  &:active {
+    background: #357a12;
+  }
+}

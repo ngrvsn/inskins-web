@@ -1,0 +1,31 @@
+.steamLinkSection {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.leftColumn {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.rightColumn {
+  flex-shrink: 0;
+}
+
+.infoSection {
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

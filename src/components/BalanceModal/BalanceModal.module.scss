@@ -1,0 +1,291 @@
+.modal {
+  background: #2a2d35;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0;
+}
+
+.title {
+  color: #FFF;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.content {
+  padding: 24px;
+}
+
+.amountSection {
+  margin-bottom: 24px;
+}
+
+.label {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.amountInput {
+  background: #1a1d23;
+  border-radius: 14px;
+  border: 1px solid #2B2B2B;
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: #49AA19;
+  }
+
+  &.error {
+    border-color: #DC4446;
+  }
+}
+
+.currency {
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.input {
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 600;
+  flex: 1;
+  outline: none;
+
+  &::placeholder {
+    color: #666;
+  }
+}
+
+.currencySelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.currencyIcon {
+  width: 32px;
+  height: 32px;
+  background: #49AA19;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.currencyInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.currencyName {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.currencyCode {
+  color: #999;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.minAmount {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  margin-top: 12px;
+}
+
+.errorMessage {
+  color: #DC4446;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin-top: 8px;
+}
+
+.balanceInfo {
+  margin-bottom: 24px;
+}
+
+.withdrawCurrencySelector {
+  background: #1a1d23;
+  border-radius: 14px;
+  border: 1px solid #2B2B2B;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.balanceDetails {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.balanceItem {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paymentMethods {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+
+}
+
+.paymentDataSection {
+  margin-bottom: 24px;
+}
+
+.paymentInput {
+  background: #1a1d23;
+  border-radius: 14px;
+  border: 1px solid #2B2B2B;
+  padding: 16px 20px;
+  color: #FFF;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: #666;
+  }
+
+  &:focus {
+    border-color: #49AA19;
+  }
+
+  &.error {
+    border-color: #DC4446;
+  }
+}
+
+.warning {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 10px;
+background: rgba(37, 39, 45, 0.60);
+  padding: 14px 12px;
+  margin-bottom: 24px;
+
+  span {
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+}
+
+.submitButton {
+  background: #49AA19;
+  border: none;
+  border-radius: 14px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 16px 24px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+
+  &:hover:not(:disabled) {
+    background: #3d8f15;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    background: #666;
+    cursor: not-allowed;
+  }
+}
+
+.support {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: center;
+}
+
+.telegramLink {
+  color: #49AA19;
+  text-decoration-line: underline;
+text-decoration-style: solid;
+text-decoration-skip-ink: none;
+text-decoration-thickness: auto;
+text-underline-offset: auto;
+text-underline-position: from-font;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

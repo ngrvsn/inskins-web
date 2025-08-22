@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// Панель фильтров
+.filterPanel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.skinsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 7px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(19, 20, 25, 0.6);
+}
+
+.skinCardWrapper {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 16px;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.selected {
+    // Стили для выбранной карточки
+  }
+}
+
+.checkIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}

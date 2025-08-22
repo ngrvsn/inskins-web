@@ -1,0 +1,68 @@
+// Выпадающие списки
+.dropdown {
+  position: relative;
+}
+
+.dropdownButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 14px;
+  background: var(--inskins-bg-panel);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+  justify-content: space-between;
+
+  &:hover {
+    background: var(--inskins-hover-panel);
+    transform: translateY(-1px);
+  }
+}
+
+.arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  border-radius: 8px;
+  background: rgba(19, 20, 25, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

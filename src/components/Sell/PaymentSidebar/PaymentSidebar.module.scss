@@ -1,0 +1,291 @@
+.sidebar {
+  border-radius: 16px;
+  background: var(--inskins-bg-panel);
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 20px;
+}
+
+.selectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.selectionInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selectionText {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.count {
+  color: #49AA19;
+  font-weight: 600;
+}
+
+.divider {
+  width: 1px;
+  height: 28px;
+  background: #2B2B2B;
+}
+
+
+
+.totalSection {
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #2B2B2B;
+}
+
+.totalAmount {
+  color: #FFF;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 34px;
+}
+
+.amount {
+  color: #49AA19;
+}
+
+.currencySelector {
+  position: relative;
+}
+
+.currencyButton {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.open {
+    opacity: 1;
+  }
+}
+
+.currencyIcon {
+  width: 28px;
+  height: 28px;
+  background: #49AA19;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.currencyInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.currencyName {
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.currencyCode {
+  color: #999;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.dropdownIcon {
+  transition: transform 0.2s ease;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.currencyDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(19, 20, 25, 0.95);
+  border: 1px solid #2B2B2B;
+  border-radius: 12px;
+  margin-top: 8px;
+  z-index: 10;
+  overflow: hidden;
+  min-width: 120px;
+}
+
+.currencyOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(73, 170, 25, 0.1);
+  }
+
+  &.selected {
+    background: rgba(73, 170, 25, 0.2);
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #2B2B2B;
+  }
+
+  .currencyIcon {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .currencyName {
+    font-size: 11px;
+  }
+
+  .currencyCode {
+    font-size: 9px;
+  }
+}
+
+.paymentSection {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0 0 16px 0;
+}
+
+.paymentMethods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.protectionInfo {
+  display: flex;
+  align-items: flex-start;
+    align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(37, 39, 45, 0.60);
+}
+
+
+.protectionTextContainer {
+  flex: 1;
+}
+
+.protectionText {
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin-bottom: 4px;
+}
+
+.protectionLink {
+  color: #49AA19;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.payoutSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.payoutLabel {
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.payoutAmount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #49AA19;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.infoIcon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.proceedButton {
+  background: #49AA19;
+  border: none;
+  border-radius: 14px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 16px 24px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #3d8f15;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    background: #666;
+    cursor: not-allowed;
+  }
+}

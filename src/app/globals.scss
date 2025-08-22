@@ -1,0 +1,86 @@
+// CSS переменные для цветов проекта
+:root {
+  --inskins-bg-primary: #0a0b0f;
+  --inskins-bg-secondary: #0d0e12;
+  --inskins-bg-panel: rgba(19, 20, 25, 0.60);
+  --inskins-hover-panel: rgba(255, 255, 255, 0.15);
+  --inskins-green: #7bf202;
+  --inskins-green-gradient: linear-gradient(250deg, #82f04f -27.92%, #35a600 93.66%);
+  --inskins-border: #1c1c1c;
+  --inskins-text-primary: #fff;
+  --inskins-text-secondary: #999;
+  --inskins-text-muted: #666;
+  --max-width: 1600px;
+}
+
+// Глобальные стили
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--inskins-text-primary);
+  background: var(--inskins-bg-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  min-height: calc(100vh - 200px);
+  padding: 40px 0;
+}
+
+// Общий контейнер
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// Кнопки
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+// Инпуты и селекты
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+// Скроллбар
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--inskins-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+
+  &:hover {
+    background: #555;
+  }
+}

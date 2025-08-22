@@ -1,0 +1,40 @@
+// Поиск
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 20px 12px 40px;
+  border: none;
+  border-radius: 14px;
+  background: var(--inskins-bg-panel);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &:focus {
+    outline: none;
+    background: var(--inskins-hover-panel);
+    box-shadow: 0 0 0 2px rgba(73, 170, 25, 0.3);
+  }
+}
+

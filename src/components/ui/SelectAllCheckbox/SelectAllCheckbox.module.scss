@@ -1,0 +1,36 @@
+.container{
+  display: flex;
+padding: 12px 20px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border-radius: 14px;
+background:  var(--inskins-bg-panel);
+backdrop-filter: blur(27px);
+}
+
+.selectAllLabel {
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+  align-items: center;
+gap: 8px;
+  &:hover {
+    background: var(--inskins-hover-panel);
+  }
+}
+
+.selectAllCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #49aa19;
+  cursor: pointer;
+}
+
+.selectAllText {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+}

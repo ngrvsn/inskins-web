@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px;
+  border-radius: 16px;
+  background: rgba(19, 20, 25, 0.6);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.icon {
+  margin-bottom: 8px;
+}
+
+.title {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 24px;
+  margin: 0;
+}
+
+.description {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.loginButton {
+  margin-top: 8px;
+}

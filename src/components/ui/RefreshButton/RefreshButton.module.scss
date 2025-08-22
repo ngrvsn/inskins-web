@@ -1,0 +1,22 @@
+// Кнопка обновления
+.refreshButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: none;
+  border-radius: 14px;
+  background: var(--inskins-bg-panel);
+backdrop-filter: blur(27px);;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--inskins-hover-panel);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
