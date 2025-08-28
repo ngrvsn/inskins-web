@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Overlay } from '../Overlay/Overlay'
 import Image from 'next/image'
 import { Button } from '../Button/Button'
-import warningIcon from '@/assets/icons/information-warn-gray.svg'
+import warningIcon from '@/assets/icons/information-gray.svg'
 import Link from 'next/link'
 import styles from './FraudWarningModal.module.scss'
 

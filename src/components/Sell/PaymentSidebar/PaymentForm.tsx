@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { Button, Input, CountryBankSelector, FraudWarningModal } from '../../ui'
 import {
   PaymentCard,
   type PaymentMethodId
 } from '../../ui/PaymentCard/PaymentCard'
 import Link from 'next/link'
+import { type ITransaction } from '@/types/transaction'
 import styles from './PaymentForm.module.scss'
 import backIcon from '@/assets/icons/white-arrow-left.svg'
 import checkSoloGreen from '@/assets/icons/check-solo-green.svg'
@@ -37,6 +39,8 @@ export const PaymentForm = ({
   totalAmount,
   currency
 }: IPaymentFormProps) => {
+  const router = useRouter()
+
   const [formData, setFormData] = useState<IPaymentFormData>({
     country: 'RU',
     bank: 'sber',
@@ -47,6 +51,23 @@ export const PaymentForm = ({
 
   const [errors, setErrors] = useState<Partial<IPaymentFormData>>({})
   const [isFraudModalOpen, setIsFraudModalOpen] = useState(false)
+
+  // Создание мок транзакции
+  const createMockTransaction = (): ITransaction => {
+    const transactionId = Math.floor(Math.random() * 90000000) + 10000000 // Генерируем 8-значный ID
+
+    return {
+      id: transactionId.toString(),
+      status: 'pending-confirmation',
+      createdAt: new Date().toISOString(),
+      timeLeft: 600, // 10 минут в секундах
+      botInfo: {
+        level: 42,
+        name: 'INSKINS Bot #1',
+        avatar: '/bot-avatar.png'
+      }
+    }
+  }
 
   // Валидация номера карты (16 цифр)
   const validateCardNumber = (cardNumber: string): boolean => {
@@ -117,7 +138,15 @@ export const PaymentForm = ({
 
   const handleFraudModalConfirm = () => {
     setIsFraudModalOpen(false)
+
+    // Создаем мок транзакцию
+    const transaction = createMockTransaction()
+
+    // Вызываем оригинальный обработчик (для совместимости)
     onSubmit(formData)
+
+    // Перенаправляем на страницу отслеживания транзакции
+    router.push(`/sell/transaction/${transaction.id}`)
   }
 
   return (

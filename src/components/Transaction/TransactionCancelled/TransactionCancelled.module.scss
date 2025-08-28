@@ -1,0 +1,86 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content {
+  background: rgba(19, 20, 25, 0.6);
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.iconSection {
+  margin-bottom: 24px;
+}
+
+.cancelIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 24px 0;
+}
+
+.transactionNumber {
+  margin-bottom: 32px;
+}
+
+.reasonSection {
+  margin-bottom: 40px;
+}
+
+.reasonText {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.supportText {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.supportLink {
+  color: #49aa19;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: #5bc226;
+  }
+}
+
+.buttonSection {
+  display: flex;
+  justify-content: center;
+}
+
+.retryButton {
+  min-width: 250px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 24px;
+  }
+
+  .retryButton {
+    width: 100%;
+    max-width: 300px;
+  }
+}

@@ -1,0 +1,97 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content {
+  background: rgba(19, 20, 25, 0.6);
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 24px 0;
+}
+
+.transactionNumber {
+  margin-bottom: 32px;
+}
+
+.protectionBanner {
+  margin-bottom: 32px;
+}
+
+.link {
+  color: #49aa19;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.supportSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.supportIcon {
+  flex-shrink: 0;
+}
+
+.supportContent {
+  flex: 1;
+}
+
+.supportTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 8px 0;
+}
+
+.supportText {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.buttonSection {
+  display: flex;
+  justify-content: center;
+}
+
+.createButton {
+  min-width: 280px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 24px;
+  }
+
+  .supportSection {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .createButton {
+    width: 100%;
+    max-width: 300px;
+  }
+}

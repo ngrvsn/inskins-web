@@ -1,0 +1,25 @@
+.banner {
+ display: flex;
+padding: 14px 12px;
+align-items: center;
+gap: 12px;
+align-self: stretch;
+border-radius: 14px;
+background: var(--inskins-bg-panel);
+text-align: start;
+
+}
+
+
+.content {
+  color: #FFF;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px; /* 150% */
+  flex: 1;
+}
+
+.greenBorder {
+  border: 1px solid #49AA19;
+}

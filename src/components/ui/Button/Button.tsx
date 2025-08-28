@@ -5,12 +5,14 @@ import styles from './Button.module.scss'
 
 interface IButtonProps {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'disabled'
+  variant?: 'primary' | 'secondary' | 'disabled' | 'white' | 'dark'
   size?: 'small' | 'medium' | 'large'
   disabled?: boolean
   onClick?: () => void
   className?: string
   type?: 'button' | 'submit' | 'reset'
+  icon?: ReactNode
+  iconPosition?: 'left' | 'right'
 }
 
 export const Button = ({
@@ -20,7 +22,9 @@ export const Button = ({
   disabled = false,
   onClick,
   className = '',
-  type = 'button'
+  type = 'button',
+  icon,
+  iconPosition = 'left'
 }: IButtonProps) => {
   const buttonClass = `${styles.button} ${styles[variant]} ${styles[size]} ${className}`
 
@@ -31,7 +35,13 @@ export const Button = ({
       onClick={onClick}
       disabled={disabled || variant === 'disabled'}
     >
-      {children}
+      {icon && iconPosition === 'left' && (
+        <span className={styles.iconLeft}>{icon}</span>
+      )}
+      <span className={styles.content}>{children}</span>
+      {icon && iconPosition === 'right' && (
+        <span className={styles.iconRight}>{icon}</span>
+      )}
     </button>
   )
 }
