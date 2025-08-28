@@ -6,6 +6,7 @@ import { PageTitle } from '@/components/ui'
 import { ControlsPanel } from '@/components/Buy/ControlsPanel/ControlsPanel'
 import { FiltersPanel } from '@/components/Buy/FiltersPanel/FiltersPanel'
 import { BuySkinsGrid } from '@/components/Buy/BuySkinsGrid/BuySkinsGrid'
+import { WeaponPanel } from '@/components/Buy/WeaponPanel/WeaponPanel'
 import mockCard from '@/assets/images/mockCard.png'
 import styles from './page.module.scss'
 
@@ -41,6 +42,15 @@ interface IFilters {
 interface ICartItem {
   skinId: string
   quantity: number
+}
+
+interface ISelectedWeapons {
+  knife: string
+  pistol: string
+  rifle: string
+  sniper: string
+  smg: string
+  shotgun: string
 }
 
 // Моковые данные скинов
@@ -233,6 +243,16 @@ export default function BuyPage() {
   // Состояние корзины
   const [cartItems, setCartItems] = useState<ICartItem[]>([])
 
+  // Состояние выбранного оружия
+  const [selectedWeapons, setSelectedWeapons] = useState<ISelectedWeapons>({
+    knife: 'all',
+    pistol: 'all',
+    rifle: 'all',
+    sniper: 'all',
+    smg: 'all',
+    shotgun: 'all'
+  })
+
   // Фильтрация и сортировка скинов
   const filteredAndSortedSkins = useMemo(() => {
     let result = [...mockSkins]
@@ -348,6 +368,14 @@ export default function BuyPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleWeaponChange = (category: string, weapon: string) => {
+    setSelectedWeapons((prev) => ({
+      ...prev,
+      [category]: weapon
+    }))
+    setCurrentPage(1)
+  }
+
   return (
     <div className={styles.buyPage}>
       <PageTitle title='Купить скины CS2, Dota 2, Rust по выгодным ценам' />
@@ -362,6 +390,10 @@ export default function BuyPage() {
         </div>
 
         <div className={styles.rightColumn}>
+          <WeaponPanel
+            selectedWeapons={selectedWeapons}
+            onWeaponChange={handleWeaponChange}
+          />
           <ControlsPanel
             selectedGame={selectedGame}
             onGameChange={handleGameChange}

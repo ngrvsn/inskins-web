@@ -18,31 +18,87 @@ import inskinsIcon from '@/assets/icons/inskins-payment.svg'
 
 // Конфигурация платежных методов
 const paymentMethodsConfig = {
-  cards: { icon: cardIcon, title: 'Карты', showTitle: true, width: 28, height: 20 },
+  cards: {
+    icon: cardIcon,
+    title: 'Карты',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
   sbp: { icon: sbpIcon, title: 'СБП', showTitle: false, width: 75, height: 36 },
-  'usdt-trc': { icon: usdtTrcIcon, title: 'USDT TRC-20', showTitle: false, width: 75, height: 36 },
-  binance: { icon: binanceIcon, title: 'BINANCE', showTitle: false, width: 77, height: 16 },
-  'usdc': { icon: usdcIcon, title: 'USDC TRC-20', showTitle: false, width: 75, height: 36 },
-  bitcoin: { icon: bitcoinIcon, title: 'bitcoin', showTitle: false, width: 77, height: 18 },
-  ethereum: { icon: ethereumIcon, title: 'Ethereum', showTitle: false, width: 77, height: 21 },
-  solana: { icon: solanaIcon, title: 'SOLANA', showTitle: false, width: 77, height: 21 },
+  'usdt-trc': {
+    icon: usdtTrcIcon,
+    title: 'USDT TRC-20',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  binance: {
+    icon: binanceIcon,
+    title: 'BINANCE',
+    showTitle: false,
+    width: 77,
+    height: 16
+  },
+  usdc: {
+    icon: usdcIcon,
+    title: 'USDC TRC-20',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  bitcoin: {
+    icon: bitcoinIcon,
+    title: 'Bitcoin',
+    showTitle: false,
+    width: 77,
+    height: 18
+  },
+  ethereum: {
+    icon: ethereumIcon,
+    title: 'Ethereum',
+    showTitle: false,
+    width: 77,
+    height: 21
+  },
+  solana: {
+    icon: solanaIcon,
+    title: 'SOLANA',
+    showTitle: false,
+    width: 77,
+    height: 21
+  },
   ton: { icon: tonIcon, title: 'TON', showTitle: false, width: 70, height: 30 },
-  'usdt-erc': { icon: usdtErcIcon, title: 'USDT ERC-20', showTitle: false, width: 75, height: 36 },
-  inskins: { icon: inskinsIcon, title: 'inskins balance', showTitle: false, width: 77, height: 32 }
-}
+  'usdt-erc': {
+    icon: usdtErcIcon,
+    title: 'USDT ERC-20',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  inskins: {
+    icon: inskinsIcon,
+    title: 'Inskins Balance',
+    showTitle: false,
+    width: 77,
+    height: 32
+  }
+} as const
 
-type PaymentMethodId = keyof typeof paymentMethodsConfig
+export type PaymentMethodId = keyof typeof paymentMethodsConfig
 
 interface IPaymentCardProps {
   methodId: PaymentMethodId
   isSelected?: boolean
   onClick?: () => void
+  showCheckmark?: boolean
 }
 
 export const PaymentCard = ({
   methodId,
   isSelected = false,
-  onClick
+  onClick,
+  showCheckmark = false
 }: IPaymentCardProps) => {
   const config = paymentMethodsConfig[methodId]
 
@@ -70,6 +126,15 @@ export const PaymentCard = ({
 
 // Экспорт доступных методов для использования
 export const PAYMENT_METHODS: PaymentMethodId[] = [
-  'cards', 'sbp', 'usdt-trc', 'binance', 'usdc',
-  'bitcoin', 'ethereum', 'solana', 'ton', 'usdt-erc', 'inskins'
-]
+  'cards',
+  'sbp',
+  'usdt-trc',
+  'binance',
+  'usdc',
+  'bitcoin',
+  'ethereum',
+  'solana',
+  'ton',
+  'usdt-erc',
+  'inskins'
+] as const

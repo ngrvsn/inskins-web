@@ -39,12 +39,12 @@ export const ControlsPanel = ({
         onChange={onGameChange}
         options={gameOptions}
       />
-      <SortDropdown value={sortOrder} onChange={onSortChange} />
       <SearchInput
         value={searchQuery}
         onChange={onSearchChange}
         placeholder='Поиск по скинам'
       />
+      <SortDropdown value={sortOrder} onChange={onSortChange} />
     </div>
   )
 }

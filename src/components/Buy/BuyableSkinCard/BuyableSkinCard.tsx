@@ -66,11 +66,6 @@ export const BuyableSkinCard = ({
         <h3 className={styles.title}>{title}</h3>
 
         <div className={styles.priceContainer}>
-          {originalPrice && (
-            <div className={styles.originalPrice}>
-              {originalPrice.toLocaleString()} {currency}
-            </div>
-          )}
           <div className={styles.price}>
             {price.toLocaleString()} {currency}
           </div>

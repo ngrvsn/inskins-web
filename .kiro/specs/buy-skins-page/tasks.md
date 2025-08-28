@@ -39,16 +39,21 @@
   - Добавить логику взаимодействия между компонентами
   - _Требования: все требования для полного функционала_
 
-- [ ] 7. Фиксы
+- [ ] 8. Фиксы
 
-  - Какого хуя с Редкое, популярное и тд из левого верхнего угла КАРТОЧЕК сьебались В ЛЕВЫЙ ВЕРХНИЙ УГОЛ ЭКРАНА БЛЯДЬ?
-  - НЕ НАДО СЧИТАТЬ ЦЕНУ СО СКИДКОЙ И ЗАЧЕРКИВАТЬ ПИСАТЬ НОВУЮ В КАРТОЧКЕ, ПРОСТО ПИШИ СКИДКУ ОКОЛО ЦЕНЫ МОК ДАННЫМИ К НЕКОТОРЫМ КАРТОЧКАМ
-  - Сама цена должна быть белого цвета
-  - Где блядь пагинация?
-  - У нас по вью должны влезать 6 карточек в ряд, гэпы между ними 7
-  - Исправь ошибку линтера Type 'ISkin[]' is not assignable to type 'ISkin[]'. Two different types with this name exist, but they are unrelated.
-    Type 'ISkin' is not assignable to type 'ISkin'. Two different types with this name exist, but they are unrelated.
-    Types of property 'image' are incompatible.
-    Type 'string | StaticImageData' is not assignable to type 'string'.
-    Type 'StaticImageData' is not assignable to type 'string'.
-    The expected type comes from property 'skins' which is declared here on type 'IntrinsicAttributes & IBuySkinsGridProps'
+  - Кнопка "В корзину" должна быть всегда книзу карточки притянута (не считая падингов карточки), какого хуя она где то в середине, а где то внизу?
+  - Редкое, популярное и тд должно быть СЛЕВА ВВЕРХУ ИМЕЙДЖ КОНТЕЙНЕРА, А НЕ ВСЕГО КОНТЕЙНЕРА КАРТОЧКИ БЛЯДЬ
+  - ГДЕ БЛЯДЬ ВООБЩЕ ПАНЕЛЬ Верхний фрейм дропдаунов с оружием
+
+border-radius: 14px;
+
+background: var(--inskins-bg-panel);padding: 14px 29px;
+
+align-items: center;
+
+gap: 34px;
+
+Иконка в иконках white-dropdown
+ОНА ДОЛЖНА БЫТЬ ПОД ТАЙТЛОМ РАСТЯНУТА НА ВСЮ ДОСТУПНУЮ ШИРИНУ
+В ряд типа Нож white-dropdown пистолет white-dropdown снайперская винтовка white-dropdown и тд
+Ты вообще проебланил необходимость создания этого компонента

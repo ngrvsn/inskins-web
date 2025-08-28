@@ -1,5 +1,6 @@
 'use client'
 
+import { StaticImageData } from 'next/image'
 import { BuyableSkinCard } from '../BuyableSkinCard/BuyableSkinCard'
 import styles from './BuySkinsGrid.module.scss'
 
@@ -9,7 +10,7 @@ interface ISkin {
   price: number
   originalPrice?: number
   discount?: number
-  image: string
+  image: string | StaticImageData
   badge?: string
   game: string
   rarity: string

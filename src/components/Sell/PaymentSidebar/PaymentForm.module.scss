@@ -1,0 +1,170 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.backText {
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 157.143% */
+}
+
+.protectionInfo {
+  display: flex;
+  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(37, 39, 45, 0.6);
+}
+
+.protectionTextContainer {
+  flex: 1;
+}
+
+.protectionText {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin-bottom: 4px;
+}
+
+.protectionLink {
+  color: #49aa19;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.selectedMethod {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.methodCard {
+  position: relative;
+  transform: scale(1.2);
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.payoutSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+  border-top: 1px solid #2b2b2b;
+  border-bottom: 1px solid #2b2b2b;
+}
+
+.payoutLabel {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.payoutAmount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #49aa19;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.infoIcon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.privacyWarning {
+  text-align: center;
+}
+
+.privacyText {
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+}
+
+.privacyLink {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.submitButton {
+  width: 100%;
+}
