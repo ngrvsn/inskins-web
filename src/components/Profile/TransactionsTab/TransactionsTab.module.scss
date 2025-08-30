@@ -1,0 +1,104 @@
+// Таб транзакций
+.transactionsTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Заголовок раздела
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+// Поля поиска
+.searchFilters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.searchField {
+  flex: 1;
+  max-width: 300px;
+}
+
+// Таблица транзакций
+.transactionsTable {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(19, 20, 25, 0.6);
+}
+
+// Заголовки таблицы
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 120px 100px 120px 140px 100px 100px 40px;
+  background: rgba(36, 36, 41, 0.6);
+  height: 48px;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+
+.headerCell {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Тело таблицы
+.tableBody {
+  min-height: 200px;
+}
+
+.emptyState {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+// Адаптивность
+@media (max-width: 1200px) {
+  .tableHeader {
+    grid-template-columns: 1fr 100px 80px 100px 120px 80px 80px 40px;
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .headerCell {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchFilters {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .searchField {
+    max-width: none;
+  }
+
+  .tableHeader {
+    grid-template-columns: 1fr 80px 70px 80px 100px 70px 70px 32px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .headerCell {
+    font-size: 10px;
+  }
+}

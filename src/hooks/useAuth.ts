@@ -1,26 +1,27 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { IUser } from '@/types'
 
-interface IUser {
-  username: string
-  balance: string
-  currency: string
+interface IAuthUser extends IUser {
   currencySecondary: string
-  avatar: string
 }
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<IUser | null>(null)
+  const [user, setUser] = useState<IAuthUser | null>(null)
 
   // Мок данные пользователя
-  const mockUser: IUser = {
+  const mockUser: IAuthUser = {
+    id: '1',
     username: 'username_email@gmail.com',
-    balance: '0.00',
+    email: 'username_email@gmail.com',
+    avatar: 'https://via.placeholder.com/32x32/ff69b4/ffffff?text=U',
+    steamTradeUrl: '',
+    balance: 0.00,
     currency: '₽',
     currencySecondary: '$',
-    avatar: 'https://via.placeholder.com/32x32/ff69b4/ffffff?text=U'
+    language: 'ru'
   }
 
   const login = () => {

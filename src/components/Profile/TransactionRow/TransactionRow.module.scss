@@ -1,0 +1,180 @@
+// Строка транзакции
+.transactionRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 100px 120px 140px 100px 100px 40px;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// Ячейки таблицы
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #fff;
+}
+
+// Тип операции и дата
+.type {
+  font-weight: 500;
+  color: #fff;
+}
+
+.date {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+// ID транзакции
+.transactionId {
+  font-family: monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+// Статусы
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.statusCompleted {
+  background: rgba(73, 170, 25, 0.2);
+  color: #49aa19;
+}
+
+.statusCancelled {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.statusPending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+// Сумма
+.amount {
+  font-weight: 500;
+  color: #fff;
+}
+
+// Платежная система
+.paymentSystem {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+// Направление
+.destination {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+// Изменение баланса
+.balanceChange {
+  font-weight: 500;
+}
+
+.positive {
+  color: #49aa19;
+}
+
+.negative {
+  color: #ef4444;
+}
+
+// Кнопка раскрытия
+.expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.expandIcon {
+  color: rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s ease;
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
+}
+
+// Адаптивность
+@media (max-width: 1200px) {
+  .transactionRow {
+    grid-template-columns: 1fr 100px 80px 100px 120px 80px 80px 40px;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .cell {
+    font-size: 13px;
+  }
+
+  .date {
+    font-size: 11px;
+  }
+
+  .transactionId {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .transactionRow {
+    grid-template-columns: 1fr 80px 70px 80px 100px 70px 70px 32px;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .cell {
+    font-size: 12px;
+  }
+
+  .date {
+    font-size: 10px;
+  }
+
+  .transactionId {
+    font-size: 11px;
+  }
+
+  .status {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .expandButton {
+    width: 28px;
+    height: 28px;
+  }
+
+  .expandIcon {
+    width: 14px;
+    height: 14px;
+  }
+}

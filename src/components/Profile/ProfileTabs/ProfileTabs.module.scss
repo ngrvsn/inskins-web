@@ -1,0 +1,45 @@
+.profileTabs {
+  margin-top: 32px;
+}
+
+.tabsNavigation {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.tabButton {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 16px 24px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #fff;
+  }
+
+  &.active {
+    color: #fff;
+    background: #49aa19;
+    border-radius: 8px 8px 0 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #49aa19;
+    }
+  }
+}
+
+.tabContent {
+  min-height: 400px;
+}

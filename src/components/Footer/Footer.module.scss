@@ -106,30 +106,6 @@
   gap: 12px;
 }
 
-.controlGroup {
-  display: flex;
-}
-
-
-.languageButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: var(--inskins-bg-panel);
-  backdrop-filter: blur(27px);
-  border: 1px solid #333;
-  border-radius: 14px;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: #555;
-  }
-}
-
 // Нижняя секция
 .bottomSection {
   display: flex;
@@ -148,5 +124,4 @@
   display: flex;
   align-items: center;
   gap: 12px;
-
 }

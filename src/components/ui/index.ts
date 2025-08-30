@@ -1,5 +1,6 @@
 export { SkinCard } from './SkinCard/SkinCard'
 export { CurrencySelector } from './CurrencySelector/CurrencySelector'
+export { LanguageSelector } from './LanguageSelector/LanguageSelector'
 export { Overlay } from './Overlay/Overlay'
 export { PaymentCard } from './PaymentCard/PaymentCard'
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'

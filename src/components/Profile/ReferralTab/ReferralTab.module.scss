@@ -1,0 +1,45 @@
+.referralTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 60px 40px;
+  background: rgba(19, 20, 25, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.placeholder h3 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.placeholder p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.comingSoon {
+  display: inline-block;
+  background: linear-gradient(135deg, #49aa19, #3d8a15);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}

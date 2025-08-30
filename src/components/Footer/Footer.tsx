@@ -5,13 +5,13 @@ import Link from 'next/link'
 import styles from './Footer.module.scss'
 import logo from '@/assets/images/logo.png'
 import telegramFooter from '@/assets/icons/telegram-footer.svg'
-import russianFlag from '@/assets/icons/russian-flag.svg'
+
 import visaFooter from '@/assets/icons/visa-footer.svg'
 import mastercardFooter from '@/assets/icons/mastercard-footer.svg'
 import sberpayFooter from '@/assets/icons/sberpay-footer.svg'
 import sbpFooter from '@/assets/icons/sbp-footer.svg'
 import umoneyFooter from '@/assets/icons/umoney-footer.svg'
-import { CurrencySelector } from '../ui'
+import { CurrencySelector, LanguageSelector } from '../ui'
 
 export const Footer = () => {
   return (
@@ -84,17 +84,7 @@ export const Footer = () => {
               <CurrencySelector />
 
               {/* Выбор языка */}
-              <div className={styles.controlGroup}>
-                <button className={styles.languageButton}>
-                  <Image
-                    src={russianFlag}
-                    alt='Русский'
-                    width={16}
-                    height={16}
-                  />
-                  Русский
-                </button>
-              </div>
+              <LanguageSelector />
             </div>
           </div>
         </div>

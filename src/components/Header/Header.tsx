@@ -49,6 +49,11 @@ export const Header = () => {
     setIsProfileDropdownOpen(false)
   }
 
+  const handleProfileClick = () => {
+    router.push('/profile')
+    setIsProfileDropdownOpen(false)
+  }
+
   const handleBuyClick = () => {
     setActiveTab('buy')
     router.push('/')
@@ -230,7 +235,10 @@ export const Header = () => {
                     >
                       Вывести с баланса
                     </button>
-                    <button className={styles.dropdownItem}>
+                    <button
+                      className={styles.dropdownItem}
+                      onClick={handleProfileClick}
+                    >
                       Личный кабинет
                     </button>
                     <button className={styles.dropdownItem}>Инвентарь</button>

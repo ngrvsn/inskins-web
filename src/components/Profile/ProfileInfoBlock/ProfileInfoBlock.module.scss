@@ -1,0 +1,42 @@
+.profileInfoBlock {
+  background: linear-gradient(135deg, #0a0b0f 0%, #1a2f1a 100%);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.leftSection {
+  flex-shrink: 0;
+}
+
+.centerSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.rightSection {
+  flex-shrink: 0;
+  min-width: 200px;
+}
+
+.settingsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settingLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 400;
+}

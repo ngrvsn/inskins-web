@@ -1,0 +1,37 @@
+.profilePage {
+  min-height: calc(100vh - 200px); // Учитываем высоту хедера и футера
+  background: #0a0b0f;
+  padding: 24px 0;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.spinner {
+  color: #49aa19;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.content {
+  margin-top: 32px;
+}
+
+.placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  text-align: center;
+  padding: 48px 24px;
+  background: rgba(19, 20, 25, 0.6);
+  border-radius: 12px;
+}

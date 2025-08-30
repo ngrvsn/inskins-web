@@ -23,3 +23,34 @@ export interface ITransactionResponse {
   success: boolean
   error?: string
 }
+
+// Типы для профиля пользователя
+
+export type TTransactionType = 'sale' | 'purchase' | 'deposit' | 'withdrawal'
+export type TTransactionStatusProfile = 'completed' | 'cancelled' | 'pending'
+
+export interface ISkinTransaction {
+  id: string
+  name: string
+  game: string
+  price: number
+  image: string
+}
+
+export interface IProfileTransaction {
+  id: string
+  type: TTransactionType
+  date: Date
+  status: TTransactionStatusProfile
+  amount: number
+  currency: string
+  paymentSystem: string
+  destination: string
+  balanceChange: number
+  skins?: ISkinTransaction[]
+}
+
+export interface ITransactionFilters {
+  transactionId: string
+  skinName: string
+}
