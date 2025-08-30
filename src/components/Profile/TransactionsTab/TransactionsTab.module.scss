@@ -32,17 +32,19 @@
   border-radius: 12px;
   overflow: hidden;
   background: rgba(19, 20, 25, 0.6);
+  width: 100%;
 }
 
 // Заголовки таблицы
 .tableHeader {
   display: grid;
-  grid-template-columns: 1fr 120px 100px 120px 140px 100px 100px 40px;
+  grid-template-columns: 20% 12% 12% 14% 16% 12% 14%;
   background: rgba(36, 36, 41, 0.6);
   height: 48px;
   align-items: center;
   padding: 0 20px;
-  gap: 16px;
+  gap: 12px;
+  width: 100%;
 }
 
 .headerCell {
@@ -72,9 +74,9 @@
 // Адаптивность
 @media (max-width: 1200px) {
   .tableHeader {
-    grid-template-columns: 1fr 100px 80px 100px 120px 80px 80px 40px;
+    grid-template-columns: 20% 12% 12% 14% 16% 12% 14%;
     padding: 0 16px;
-    gap: 12px;
+    gap: 10px;
   }
 
   .headerCell {
@@ -93,7 +95,7 @@
   }
 
   .tableHeader {
-    grid-template-columns: 1fr 80px 70px 80px 100px 70px 70px 32px;
+    grid-template-columns: 18% 8% 12% 12% 12% 8% 30%;
     padding: 0 12px;
     gap: 8px;
   }

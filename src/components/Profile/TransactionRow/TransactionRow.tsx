@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { IProfileTransaction } from '@/types/transaction'
-import { TransactionDetails } from '../TransactionDetails/TransactionDetails'
+import { TransactionDetails } from '../TransactionDetails'
 import styles from './TransactionRow.module.scss'
 
 interface ITransactionRowProps {
@@ -80,18 +80,47 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
     <>
       <div className={styles.transactionRow} onClick={handleToggle}>
         <div className={styles.cell}>
-          <div className={styles.type}>{getTypeLabel(transaction.type)}</div>
-          <div className={styles.date}>{formatDate(transaction.date)}</div>
+          <div className={styles.typeWithExpand}>
+            <div className={styles.typeInfo}>
+              <div className={styles.type}>
+                {getTypeLabel(transaction.type)}
+              </div>
+              <div className={styles.date}>{formatDate(transaction.date)}</div>
+            </div>
+            <div className={styles.expandButton}>
+              <svg
+                className={`${styles.expandIcon} ${
+                  isExpanded ? styles.expanded : ''
+                }`}
+                width='16'
+                height='16'
+                viewBox='0 0 16 16'
+                fill='none'
+              >
+                <path
+                  d='M4 6L8 10L12 6'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
+              </svg>
+            </div>
+          </div>
         </div>
         <div className={styles.cell}>
           <span className={styles.transactionId}>#{transaction.id}</span>
         </div>
         <div className={styles.cell}>
-          <span
-            className={`${styles.status} ${getStatusClass(transaction.status)}`}
+          <div
+            className={`${styles.statusTag} ${getStatusClass(
+              transaction.status
+            )}`}
           >
-            {getStatusLabel(transaction.status)}
-          </span>
+            <span className={styles.statusText}>
+              {getStatusLabel(transaction.status)}
+            </span>
+          </div>
         </div>
         <div className={styles.cell}>
           <span className={styles.amount}>
@@ -117,25 +146,6 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
               transaction.currency
             )}
           </span>
-        </div>
-        <div className={styles.expandButton}>
-          <svg
-            className={`${styles.expandIcon} ${
-              isExpanded ? styles.expanded : ''
-            }`}
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-            fill='none'
-          >
-            <path
-              d='M4 6L8 10L12 6'
-              stroke='currentColor'
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
         </div>
       </div>
 

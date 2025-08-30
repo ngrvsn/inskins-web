@@ -28,9 +28,10 @@ const ProfilePage = () => {
 
   useEffect(() => {
     // Редирект неавторизованных пользователей на главную
-    if (!isAuthenticated) {
-      router.push('/')
-    }
+    // Временно отключено для тестирования
+    // if (!isAuthenticated) {
+    //   router.push('/')
+    // }
   }, [isAuthenticated, router])
 
   // Обработчики изменений настроек
@@ -48,9 +49,10 @@ const ProfilePage = () => {
 
   // Если пользователь не авторизован, показываем пустую страницу
   // (редирект произойдет в useEffect)
-  if (!isAuthenticated) {
-    return null
-  }
+  // Временно отключено для тестирования
+  // if (!isAuthenticated) {
+  //   return null
+  // }
 
   const breadcrumbItems = [{ label: 'Личный кабинет' }]
 

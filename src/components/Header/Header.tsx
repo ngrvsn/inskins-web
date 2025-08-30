@@ -195,9 +195,9 @@ export const Header = () => {
                 />
                 <div className={styles.balanceInfo}>
                   <span className={styles.balance}>
-                    {user?.balance} {user?.currency}
+                    {user?.balance?.toFixed(2)} {user?.currency}
                     <span className={styles.balanceSecondary}>
-                      ({user?.balance}
+                      ({user?.balance?.toFixed(2)}
                       {user?.currencySecondary})
                     </span>
                   </span>

@@ -168,7 +168,6 @@ export const TransactionsTab = ({}: ITransactionsTabProps) => {
           <div className={styles.headerCell}>ПЛАТЕЖ.СИСТЕМА</div>
           <div className={styles.headerCell}>КУДА</div>
           <div className={styles.headerCell}>БАЛАНС</div>
-          <div className={styles.headerCell}></div>
         </div>
 
         {/* Тело таблицы */}
