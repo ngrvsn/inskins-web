@@ -1,161 +1,113 @@
-import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
-import axiosInstance from './axios'
+import { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
+import { IRefreshTokenResponse } from '../auth/types'
+import { api, privateApi } from './axios'
 
-// Интерфейсы для токенов
-interface ITokens {
-  accessToken: string
-  refreshToken: string
-  expiration: number
-  tokenType: string
+interface CustomInternalAxiosRequestConfig<D = unknown> extends InternalAxiosRequestConfig<D> {
+  _isRetry?: boolean
 }
 
-interface IRefreshTokenResponse {
-  success: boolean
-  data: {
-    accessToken: string
-    refreshToken: string
-    expiration: number
-    tokenType: string
-  }
-  message: string
-  timestamp: string
-  requestId: string
+interface FailedRequest {
+  resolve: (token: string) => void
+  reject: (error: unknown) => void
 }
 
-// Утилитарные функции для работы с токенами
-const getTokensFromStorage = (): ITokens | null => {
-  try {
-    const tokens = localStorage.getItem('auth_tokens')
-    return tokens ? JSON.parse(tokens) : null
-  } catch {
-    return null
-  }
-}
+let isRefreshing = false
+let failedQueue: FailedRequest[] = []
 
-const saveTokensToStorage = (tokens: ITokens): void => {
-  try {
-    localStorage.setItem('auth_tokens', JSON.stringify(tokens))
-  } catch (error) {
-    console.error('Ошибка сохранения токенов:', error)
-  }
-}
-
-const clearTokensFromStorage = (): void => {
-  try {
-    localStorage.removeItem('auth_tokens')
-  } catch (error) {
-    console.error('Ошибка очистки токенов:', error)
-  }
-}
-
-const isTokenExpired = (expiration: number): boolean => {
-  return Date.now() >= expiration * 1000
-}
-
-// Request interceptor - автоматическое добавление Authorization header
-axiosInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const tokens = getTokensFromStorage()
-
-    if (tokens && !isTokenExpired(tokens.expiration)) {
-      config.headers = config.headers || {}
-      config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
-    } else if (tokens) {
-      // Если токен истек, очищаем его из storage
-      clearTokensFromStorage()
+const processQueue = (error: AxiosError | null, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve(token!)
     }
+  })
+  failedQueue = []
+}
 
-    return config
-  },
-  (error: AxiosError) => {
+// Request interceptor для добавления токена
+const requestInterceptor = (config: InternalAxiosRequestConfig<unknown>): InternalAxiosRequestConfig<unknown> => {
+  const token = localStorage.getItem('access_token')
+  if (token) {
+    config.headers.set('Authorization', `Bearer ${token}`)
+  }
+  return config
+}
+
+// Response interceptor для обработки ошибок и refresh токена
+const responseInterceptor = (apiInstance: AxiosInstance) => async (error: AxiosError) => {
+  const originalRequest = error.config as CustomInternalAxiosRequestConfig
+
+  if (!originalRequest) {
     return Promise.reject(error)
   }
-)
 
-// Response interceptor - обработка 401 ошибок и автообновление токенов
-axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+  // При 403 - недостаточно прав, просто возвращаем ошибку
+  if (error.response?.status === 403) {
+    return Promise.reject(error)
+  }
 
-    // Обработка 401 ошибки - попытка обновить токен
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+  // При 401 - пытаемся обновить токен
+  if (error.response?.status === 401 && !originalRequest._isRetry) {
 
-      const tokens = getTokensFromStorage()
+    if (isRefreshing) {
+      return new Promise<string>((resolve, reject) => {
+        failedQueue.push({ resolve, reject })
+      })
+        .then((token) => {
+          originalRequest.headers.set('Authorization', `Bearer ${token}`)
+          return apiInstance.request(originalRequest)
+        })
+        .catch((err) => {
+          return Promise.reject(err)
+        })
+    }
 
-      if (tokens?.refreshToken) {
-        try {
-          // Попытка обновить токен
-          const refreshResponse = await axios.post<IRefreshTokenResponse>(
-            `${axiosInstance.defaults.baseURL}/api/auth/refresh`,
-            { refreshToken: tokens.refreshToken },
-            { headers: { 'Content-Type': 'application/json' } }
-          )
+    originalRequest._isRetry = true
+    isRefreshing = true
 
-          if (refreshResponse.data.success) {
-            const newTokens: ITokens = {
-              accessToken: refreshResponse.data.data.accessToken,
-              refreshToken: refreshResponse.data.data.refreshToken,
-              expiration: refreshResponse.data.data.expiration,
-              tokenType: refreshResponse.data.data.tokenType,
-            }
+    try {
+      const refreshToken = localStorage.getItem('refresh_token')
 
-            // Сохранить новые токены
-            saveTokensToStorage(newTokens)
+      if (!refreshToken) {
+        throw new Error('No refresh token')
+      }
 
-            // Обновить заголовок Authorization для повторного запроса
-            if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `${newTokens.tokenType} ${newTokens.accessToken}`
-            }
+      const response = await api.post<IRefreshTokenResponse>('/api/auth/refresh', {
+        refresh_token: refreshToken
+      })
 
-            // Повторить оригинальный запрос с новым токеном
-            return axiosInstance(originalRequest)
-          }
-        } catch (refreshError) {
-          console.error('Ошибка обновления токена:', refreshError)
+      if (response.data.success && response.data.data?.accessToken) {
+        const newToken = response.data.data.accessToken
+        localStorage.setItem('access_token', newToken)
 
-          // Очистить некорректные токены
-          clearTokensFromStorage()
-
-          // Перенаправить на страницу авторизации только если не находимся уже на ней
-          if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
-            window.location.href = '/auth'
-          }
-
-          return Promise.reject(refreshError)
+        if (response.data.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.data.refreshToken)
         }
-      }
 
-      // Если нет refresh токена, очистить storage и перенаправить
-      clearTokensFromStorage()
-
-      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
-        window.location.href = '/auth'
+        processQueue(null, newToken)
+        originalRequest.headers.set('Authorization', `Bearer ${newToken}`)
+        return apiInstance.request(originalRequest)
+      } else {
+        throw new Error('Failed to refresh token')
       }
+    } catch (err: unknown) {
+      processQueue(err as AxiosError, null)
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      window.location.href = '/auth'
+      return Promise.reject(err)
+    } finally {
+      isRefreshing = false
     }
-
-    // Обработка 403 ошибки - перенаправление на авторизацию
-    if (error.response?.status === 403) {
-      clearTokensFromStorage()
-
-      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
-        window.location.href = '/auth'
-      }
-    }
-
-    // Логирование ошибок для отладки
-    console.error('API Error:', {
-      status: error.response?.status,
-      message: error.message,
-      url: error.config?.url,
-      method: error.config?.method,
-    })
-
-    return Promise.reject(error)
   }
-)
 
-export { getTokensFromStorage, saveTokensToStorage, clearTokensFromStorage, isTokenExpired }
+  return Promise.reject(error)
+}
+
+// Применяем интерцепторы
+privateApi.interceptors.request.use(requestInterceptor)
+privateApi.interceptors.response.use(
+  (response) => response,
+  responseInterceptor(privateApi)
+)

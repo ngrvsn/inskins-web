@@ -1,7 +1,12 @@
+// API методы для работы с пользователями
+
+import { privateApi } from '../config'
 import type {
+  IInventoryResponse,
+  IInventoryWithPricesResponse,
+  IInventoryByTradeUrlRequest,
   ITransactionFilters,
-  IInventoryItem,
-  IInventoryItemWithPrice
+  ITransactionsResponse
 } from './types'
 
 // Построение query параметров для фильтрации транзакций
@@ -25,58 +30,52 @@ export const buildTransactionFilters = (filters?: ITransactionFilters): URLSearc
   return params
 }
 
-// Форматирование предметов инвентаря для отображения
-export const formatInventoryItems = (items: IInventoryItem[]): IInventoryItem[] => {
-  return items.map(item => ({
-    ...item,
-    // Обрезаем длинные названия для UI
-    name: item.name.length > 50 ? `${item.name.substring(0, 47)}...` : item.name,
-    market_name: item.market_name.length > 50
-      ? `${item.market_name.substring(0, 47)}...`
-      : item.market_name,
-    // Нормализуем URL изображения
-    image: item.image.startsWith('http') ? item.image : `https://steamcommunity-a.akamaihd.net/economy/image/${item.image}`
-  }))
-}
-
-// Подсчет общей стоимости предметов с ценами
-export const calculateTotalValue = (items: IInventoryItemWithPrice[]): number => {
-  return items.reduce((total, item) => {
-    // Используем среднюю цену если доступна, иначе цену Steam
-    const price = item.prices.available
-      ? (item.prices.avgPrice || item.prices.steamPrice || 0)
-      : 0
-
-    return total + (price * (item.amount || 1))
-  }, 0)
-}
-
-// Фильтрация предметов по торгуемости
-export const filterTradableItems = (items: IInventoryItem[]): IInventoryItem[] => {
-  return items.filter(item => item.tradable && item.marketable)
-}
-
-// Группировка предметов по редкости
-export const groupItemsByRarity = (items: IInventoryItem[]): Record<string, IInventoryItem[]> => {
-  return items.reduce((groups, item) => {
-    const rarity = item.rarity || 'Unknown'
-    if (!groups[rarity]) {
-      groups[rarity] = []
-    }
-    groups[rarity].push(item)
-    return groups
-  }, {} as Record<string, IInventoryItem[]>)
-}
-
-// Сортировка предметов по цене (для предметов с ценами)
-export const sortItemsByPrice = (
-  items: IInventoryItemWithPrice[],
-  order: 'asc' | 'desc' = 'desc'
-): IInventoryItemWithPrice[] => {
-  return [...items].sort((a, b) => {
-    const priceA = a.prices.available ? (a.prices.avgPrice || a.prices.steamPrice || 0) : 0
-    const priceB = b.prices.available ? (b.prices.avgPrice || b.prices.steamPrice || 0) : 0
-
-    return order === 'desc' ? priceB - priceA : priceA - priceB
+// Получить инвентарь пользователя без цен по Steam ID
+export const getInventory = async (
+  steamId: string,
+  gameId: number
+): Promise<IInventoryResponse> => {
+  const response = await privateApi.get(`/api/users/${steamId}/inventory`, {
+    params: { gameId }
   })
+  return response.data
+}
+
+// Получить инвентарь по trade URL без цен
+export const getInventoryByTradeUrl = async (
+  data: IInventoryByTradeUrlRequest
+): Promise<IInventoryResponse> => {
+  const response = await privateApi.post('/api/users/inventory/by-trade-url', data)
+  return response.data
+}
+
+// Получить инвентарь с ценами по Steam ID
+export const getInventoryWithPrices = async (
+  steamId: string,
+  gameId: number
+): Promise<IInventoryWithPricesResponse> => {
+  const response = await privateApi.get(`/api/users/${steamId}/inventory/with-prices`, {
+    params: { gameId }
+  })
+  return response.data
+}
+
+// Получить инвентарь по trade URL с ценами
+export const getInventoryByTradeUrlWithPrices = async (
+  data: IInventoryByTradeUrlRequest
+): Promise<IInventoryWithPricesResponse> => {
+  const response = await privateApi.post('/api/users/inventory/by-trade-url/with-prices', data)
+  return response.data
+}
+
+// Получить транзакции пользователя с фильтрацией
+export const getTransactions = async (
+  steamId: string,
+  filters?: ITransactionFilters
+): Promise<ITransactionsResponse> => {
+  const params = buildTransactionFilters(filters)
+  const response = await privateApi.get(`/api/users/${steamId}/transactions`, {
+    params
+  })
+  return response.data
 }

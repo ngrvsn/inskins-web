@@ -65,7 +65,49 @@
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
   - _Примеры: логика токенов из `.kiro/specs/exampels/auth/auth/callback/page.md`_
 
-- [ ] 8. Проверить типизацию и исправить ошибки
+- [x] 8. Исправить архитектуру API согласно правильной структуре
+
+  401 - не авторизован
+
+403 - недостаточно прав
+
+404 - не найдено
+
+ВОТ БЛЯДЬ КАК НАДО
+
+ЧТО ЗА ГОВНО ТЫ ПОНАПИСАЛ В МОДЕЛЯХ ЗАКАЗОВ
+
+// Получить заказ по человекочитаемому номеру (начиная с 1337)
+
+export const getOrderByNumber = async (orderNumber: number): Promise<IOrder> => {
+
+if (orderNumber < 1337) {
+
+throw new Error('Номер заказа должен быть не менее 1337')
+
+1337 ЭТО ПРИМЕР БЛЯДЬ БЫЛ УЕБАН СУКА
+
+// Валидация данных заказа перед отправкой
+
+export const validateOrderData = (data: ICreateOrderRequest): { isValid: boolean; errors: string[] } => {
+
+const errors: string[] = []
+
+// Проверяем обязательные строковые поля
+
+if (!data.steamId || data.steamId.trim().length === 0) {
+
+errors.push('Steam ID обязателен')
+
+}
+
+if (!data.userLogin || data.userLogin.trim().length === 0) {
+
+errors.push('Логин пользователя обязателен')
+
+ЭТО ТЕБЯ КТО ПРОСИЛ ДЕЛАТЬ ВЫБЛЯДОК
+
+- [ ] 9. Проверить типизацию и исправить ошибки
   - Запустить TypeScript компилятор и ESLint
   - Исправить все ошибки типизации и предупреждения линтера
   - Проверить соответствие code style проекта

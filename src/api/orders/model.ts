@@ -1,4 +1,13 @@
-import { IOrderFilters, ICreateOrderRequest, IOrder } from './types'
+// API методы для работы с заказами
+
+import { privateApi } from '../config'
+import {
+  ICreateOrderRequest,
+  IOrder,
+  IOrdersResponse,
+  IOrderFilters,
+  IWithdrawOrderRequest
+} from './types'
 
 // Построение query параметров для фильтрации заказов
 export const buildOrderFilters = (filters: IOrderFilters): URLSearchParams => {
@@ -104,153 +113,51 @@ export const buildOrderFilters = (filters: IOrderFilters): URLSearchParams => {
   return params
 }
 
-// Форматирование данных заказа перед отправкой
-export const formatOrderData = (data: ICreateOrderRequest): ICreateOrderRequest => {
-  return {
-    ...data,
-    // Убираем лишние пробелы из строковых полей
-    steamId: data.steamId.trim(),
-    userLogin: data.userLogin.trim(),
-    botName: data.botName.trim(),
-    botSteamId: data.botSteamId.trim(),
-    paymentData: data.paymentData.trim(),
-    telegramUsername: data.telegramUsername.trim(),
-    notes: data.notes.trim(),
-    tradeUrl: data.tradeUrl.trim(),
-    tradeId: data.tradeId.trim(),
-    // Округляем числовые значения до 2 знаков после запятой
-    payoutAmount: Math.round(data.payoutAmount * 100) / 100,
-    amountBeforeCommission: Math.round(data.amountBeforeCommission * 100) / 100,
-    commissionRate: Math.round(data.commissionRate * 100) / 100,
-    // Очищаем массивы от пустых элементов
-    itemIds: data.itemIds.filter(id => id.trim().length > 0),
-    itemNames: data.itemNames.filter(name => name.trim().length > 0)
-  }
+// Создать новый заказ на продажу скинов
+export const createOrder = async (data: ICreateOrderRequest): Promise<IOrder> => {
+  const response = await privateApi.post<IOrder>('/api/orders', data)
+  return response.data
 }
 
-// Валидация данных заказа перед отправкой
-export const validateOrderData = (data: ICreateOrderRequest): { isValid: boolean; errors: string[] } => {
-  const errors: string[] = []
+// Получить список заказов текущего пользователя с возможностью фильтрации
+export const getMyOrders = async (filters?: IOrderFilters): Promise<IOrdersResponse> => {
+  let url = '/api/orders/my'
 
-  // Проверяем обязательные строковые поля
-  if (!data.steamId || data.steamId.trim().length === 0) {
-    errors.push('Steam ID обязателен')
+  if (filters) {
+    const queryParams = buildOrderFilters(filters)
+    if (queryParams.toString()) {
+      url += `?${queryParams.toString()}`
+    }
   }
 
-  if (!data.userLogin || data.userLogin.trim().length === 0) {
-    errors.push('Логин пользователя обязателен')
-  }
-
-  if (!data.botName || data.botName.trim().length === 0) {
-    errors.push('Имя бота обязательно')
-  }
-
-  if (!data.botSteamId || data.botSteamId.trim().length === 0) {
-    errors.push('Steam ID бота обязателен')
-  }
-
-  if (!data.paymentData || data.paymentData.trim().length === 0) {
-    errors.push('Данные для оплаты обязательны')
-  }
-
-  if (!data.tradeUrl || data.tradeUrl.trim().length === 0) {
-    errors.push('Ссылка на обмен обязательна')
-  }
-
-  // Проверяем массивы предметов
-  if (!data.itemIds || data.itemIds.length === 0) {
-    errors.push('Список ID предметов не может быть пустым')
-  }
-
-  if (!data.itemNames || data.itemNames.length === 0) {
-    errors.push('Список названий предметов не может быть пустым')
-  }
-
-  if (data.itemIds && data.itemNames && data.itemIds.length !== data.itemNames.length) {
-    errors.push('Количество ID предметов должно совпадать с количеством названий')
-  }
-
-  // Проверяем числовые значения
-  if (data.payoutAmount <= 0) {
-    errors.push('Сумма выплаты должна быть больше 0')
-  }
-
-  if (data.amountBeforeCommission <= 0) {
-    errors.push('Сумма до комиссии должна быть больше 0')
-  }
-
-  if (data.commissionRate < 0 || data.commissionRate > 100) {
-    errors.push('Процент комиссии должен быть от 0 до 100')
-  }
-
-  if (data.payoutAmount > data.amountBeforeCommission) {
-    errors.push('Сумма выплаты не может быть больше суммы до комиссии')
-  }
-
-  // Проверяем формат Steam ID (должен быть числом)
-  if (!/^\d+$/.test(data.steamId)) {
-    errors.push('Steam ID должен содержать только цифры')
-  }
-
-  if (!/^\d+$/.test(data.botSteamId)) {
-    errors.push('Steam ID бота должен содержать только цифры')
-  }
-
-  // Проверяем формат trade URL
-  if (!data.tradeUrl.includes('steamcommunity.com/tradeoffer/')) {
-    errors.push('Некорректный формат ссылки на обмен Steam')
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors
-  }
+  const response = await privateApi.get<IOrdersResponse>(url)
+  return response.data
 }
 
-// Вычисление суммы комиссии на основе данных заказа
-export const calculateCommissionAmount = (amountBeforeCommission: number, commissionRate: number): number => {
-  return Math.round(amountBeforeCommission * (commissionRate / 100) * 100) / 100
+// Получить заказ по человекочитаемому номеру
+export const getOrderByNumber = async (orderNumber: number): Promise<IOrder> => {
+  const response = await privateApi.get<IOrder>(`/api/orders/number/${orderNumber}`)
+  return response.data
 }
 
-// Проверка, завершен ли заказ на основе статуса
-export const isOrderCompleted = (order: IOrder): boolean => {
-  return order.status === 'paid' || order.status === 'declined' || order.status === 'withdrawn'
+// Получить заказ по системному ID заказа
+export const getOrderById = async (orderId: string): Promise<IOrder> => {
+  const response = await privateApi.get<IOrder>(`/api/orders/order-id/${orderId}`)
+  return response.data
 }
 
-// Получение человекочитаемого описания статуса заказа
-export const getOrderStatusDescription = (status: string): string => {
-  const statusDescriptions: Record<string, string> = {
-    created: 'Создан',
-    received: 'Получен',
-    declined: 'Отклонен',
-    withdrawn: 'Отозван',
-    stopped: 'Остановлен',
-    paid: 'Оплачен'
+// Получить заказ по MongoDB ID
+export const getOrderByMongoId = async (id: string): Promise<IOrder> => {
+  const response = await privateApi.get<IOrder>(`/api/orders/${id}`)
+  return response.data
+}
+
+// Отозвать заказ с указанием причины
+export const withdrawOrder = async (id: string, reason: string): Promise<IOrder> => {
+  const requestData: IWithdrawOrderRequest = {
+    reason: reason.trim()
   }
 
-  return statusDescriptions[status] || 'Неизвестный статус'
-}
-
-// Получение человекочитаемого описания метода оплаты
-export const getPaymentMethodDescription = (method: string): string => {
-  const methodDescriptions: Record<string, string> = {
-    sbp: 'СБП',
-    card_ru: 'Карта РФ',
-    card_visa: 'Visa',
-    card_mastercard: 'Mastercard',
-    sepa: 'SEPA',
-    paypal: 'PayPal',
-    usdt_trc20: 'USDT (TRC20)',
-    usdt_erc20: 'USDT (ERC20)',
-    usdt_bsc: 'USDT (BSC)',
-    btc: 'Bitcoin',
-    eth: 'Ethereum',
-    ton: 'TON',
-    bnb: 'BNB',
-    sol: 'Solana',
-    qiwi: 'QIWI',
-    yandex_money: 'ЮMoney'
-  }
-
-  return methodDescriptions[method] || 'Неизвестный метод'
+  const response = await privateApi.post<IOrder>(`/api/orders/${id}/withdraw`, requestData)
+  return response.data
 }

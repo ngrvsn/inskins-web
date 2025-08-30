@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { handleSteamCallback } from '../../../api/auth'
+import { handleSteamCallback } from '../../../api/auth/model'
 import styles from './page.module.scss'
 
 function CallbackContent() {
