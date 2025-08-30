@@ -11,12 +11,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
 
 .logoContainer {
-display: flex;
-gap: 46px;
+  display: flex;
+  gap: 46px;
 }
 
 .logo {
@@ -147,9 +146,9 @@ gap: 46px;
   align-items: center;
   gap: 8px;
   border-radius: 14px;
-  border: 1px solid #3CB400;
+  border: 1px solid #3cb400;
   background: transparent;
-  color: #49AA19;
+  color: #49aa19;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
@@ -160,6 +159,14 @@ gap: 46px;
   &:hover {
     background: rgba(73, 170, 25, 0.1);
   }
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  height: 44px;
 }
 
 // Профиль пользователя
@@ -175,7 +182,7 @@ gap: 46px;
   border-radius: 14px;
   border: 1px solid #141414;
   background: #131419;
-  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.10) inset;
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.1) inset;
   padding: 8px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -196,14 +203,14 @@ gap: 46px;
 }
 
 .balance {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
 }
 
 .balanceSecondary {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
@@ -223,7 +230,7 @@ gap: 46px;
   top: calc(100% + 8px);
   right: 0;
   background: #131419;
-  border: 1px solid #2B2B2B;
+  border: 1px solid #2b2b2b;
   border-radius: 14px;
   padding: 16px;
   min-width: 240px;
@@ -239,14 +246,14 @@ gap: 46px;
 }
 
 .usernameLabel {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
 }
 
 .username {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -254,7 +261,7 @@ gap: 46px;
 
 .dropdownSeparator {
   height: 1px;
-  background: #2B2B2B;
+  background: #2b2b2b;
   margin: 12px 0;
 }
 
@@ -267,7 +274,7 @@ gap: 46px;
 .dropdownItem {
   background: none;
   border: none;
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -284,7 +291,7 @@ gap: 46px;
 .logoutButton {
   background: none;
   border: none;
-  color: #DC4446;
+  color: #dc4446;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;

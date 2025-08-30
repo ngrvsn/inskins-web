@@ -50,26 +50,56 @@ export const clearTokensFromStorage = (): void => {
 }
 
 // Получить URL для авторизации через Steam
-export const getSteamAuthUrl = async (): Promise<ISteamAuthResponse> => {
-  const response = await api.get<ISteamAuthResponse>('/api/auth/steam')
+export const getSteamAuthUrl = async (): Promise<ISteamAuthResponse | string> => {
+  const response = await api.get<ISteamAuthResponse | string>('/api/auth/steam')
   return response.data
 }
 
 // Обработать callback от Steam и получить токены
 export const handleSteamCallback = async (params: URLSearchParams): Promise<ICallbackResponse> => {
-  const response = await api.get<ICallbackResponse>(
-    `/api/auth/steam/callback?${params.toString()}`
-  )
+  const url = `/api/auth/steam/callback?${params.toString()}`
 
-  // Сохраняем токены в localStorage при успешном ответе
-  if (response.data.success && response.data.data.tokens) {
+  const response = await api.get(url)
+  // Проверяем, есть ли токены в ответе (сервер возвращает их напрямую)
+  if (response.data.access_token && response.data.refresh_token) {
     saveTokensToStorage(
-      response.data.data.tokens.accessToken,
-      response.data.data.tokens.refreshToken
+      response.data.access_token,
+      response.data.refresh_token
     )
-  }
 
-  return response.data
+    // Возвращаем данные в ожидаемом формате
+    return {
+      success: true,
+      data: {
+        tokens: {
+          accessToken: response.data.access_token,
+          refreshToken: response.data.refresh_token,
+          expiration: response.data.expires_in,
+          tokenType: response.data.token_type
+        }
+      },
+      message: 'Авторизация успешна',
+      timestamp: new Date().toISOString(),
+      requestId: 'callback-' + Date.now()
+    }
+  } else {
+    console.error('Токены не найдены в ответе сервера:', response.data)
+
+    return {
+      success: false,
+      data: {
+        tokens: {
+          accessToken: '',
+          refreshToken: '',
+          expiration: 0,
+          tokenType: ''
+        }
+      },
+      message: 'Токены не получены от сервера',
+      timestamp: new Date().toISOString(),
+      requestId: 'callback-' + Date.now()
+    }
+  }
 }
 
 // Обновить access token используя refresh token
@@ -112,8 +142,8 @@ export const logout = async (): Promise<ILogoutResponse> => {
 }
 
 // Получить информацию о текущем пользователе
-export const getMe = async (): Promise<IUserInfoResponse> => {
-  const response = await privateApi.get<IUserInfoResponse>('/api/auth/me')
+export const getMe = async (): Promise<any> => {
+  const response = await privateApi.get('/api/auth/me')
   return response.data
 }
 

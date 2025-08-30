@@ -6,17 +6,16 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import styles from './Header.module.scss'
 import logo from '@/assets/images/logo.png'
-import steamButton from '@/assets/icons/steam-button.svg'
 import dropdownIcon from '@/assets/icons/icon-dropdown.svg'
 import cartIcon from '@/assets/icons/cart.svg'
-import { CurrencySelector, SteamLoginButton } from '@/components/ui'
+import { CurrencySelector, SteamLoginButton, Spinner } from '@/components/ui'
 import { BalanceModal } from '@/components/BalanceModal/BalanceModal'
 import { useAuth } from '@/hooks/useAuth'
 
 export const Header = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const { isAuthenticated, user, login, logout } = useAuth()
+  const { isAuthenticated, user, logout, isLoading, error } = useAuth()
 
   const [activeTab, setActiveTab] = useState('buy') // 'buy' или 'sell'
   const [activeNavItem, setActiveNavItem] = useState('main') // 'main', 'market', 'blog', 'faq'
@@ -26,13 +25,20 @@ export const Header = () => {
 
   const profileRef = useRef<HTMLDivElement>(null)
 
-  const handleLogin = () => {
-    login()
+  const handleLoginError = (error: string) => {
+    // Можно добавить toast уведомление или другую обработку ошибок
+    console.error('Ошибка авторизации в Header:', error)
   }
 
-  const handleLogout = () => {
-    logout()
-    setIsProfileDropdownOpen(false)
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setIsProfileDropdownOpen(false)
+    } catch (error) {
+      console.error('Ошибка выхода из системы:', error)
+      // Закрываем меню даже при ошибке
+      setIsProfileDropdownOpen(false)
+    }
   }
 
   const toggleProfileDropdown = () => {
@@ -168,18 +174,22 @@ export const Header = () => {
         {/* Правая часть - валюта и вход */}
         <div className={styles.rightSection}>
           {/* Селектор валюты или корзина */}
-          {!isAuthenticated ? (
+          {!isAuthenticated && !isLoading ? (
             <CurrencySelector />
-          ) : (
+          ) : isAuthenticated ? (
             <button className={styles.cartButton}>
               <Image src={cartIcon} alt='Корзина' width={16} height={16} />
               КОРЗИНА
             </button>
-          )}
+          ) : null}
 
-          {/* Кнопка входа через Steam или профиль пользователя */}
-          {!isAuthenticated ? (
-            <SteamLoginButton onClick={handleLogin} />
+          {/* Кнопка входа через Steam, состояние загрузки или профиль пользователя */}
+          {isLoading ? (
+            <div className={styles.loadingContainer}>
+              <Spinner size='small' />
+            </div>
+          ) : !isAuthenticated ? (
+            <SteamLoginButton onError={handleLoginError} />
           ) : (
             <div className={styles.profileContainer} ref={profileRef}>
               <button
@@ -187,7 +197,10 @@ export const Header = () => {
                 onClick={toggleProfileDropdown}
               >
                 <Image
-                  src={user?.avatar || ''}
+                  src={
+                    user?.avatar ||
+                    'https://via.placeholder.com/28x28/49AA19/ffffff?text=U'
+                  }
                   alt='Аватар'
                   width={28}
                   height={28}
@@ -195,10 +208,11 @@ export const Header = () => {
                 />
                 <div className={styles.balanceInfo}>
                   <span className={styles.balance}>
-                    {user?.balance?.toFixed(2)} {user?.currency}
+                    {user?.balance?.toFixed(2) || '0.00'}{' '}
+                    {user?.currency || '₽'}
                     <span className={styles.balanceSecondary}>
-                      ({user?.balance?.toFixed(2)}
-                      {user?.currencySecondary})
+                      ({user?.balance?.toFixed(2) || '0.00'}
+                      {user?.currencySecondary || '$'})
                     </span>
                   </span>
                 </div>
@@ -217,7 +231,9 @@ export const Header = () => {
                 <div className={styles.profileDropdown}>
                   <div className={styles.dropdownHeader}>
                     <span className={styles.usernameLabel}>Username</span>
-                    <span className={styles.username}>{user?.username}</span>
+                    <span className={styles.username}>
+                      {user?.username || 'Пользователь'}
+                    </span>
                   </div>
 
                   <div className={styles.dropdownSeparator}></div>

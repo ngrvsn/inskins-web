@@ -28,25 +28,29 @@ function CallbackContent() {
           // Используем API метод для обработки callback
           const response = await handleSteamCallback(searchParams)
 
-          if (response.success && response.data.tokens) {
+          if (response.success && response.data && response.data.tokens) {
             // Токены автоматически сохраняются в handleSteamCallback
 
             // Показываем сообщение об успехе
             setStatus('success')
             setMessage('Авторизация успешна! Перенаправление...')
 
-            // Перенаправляем через 2 секунды
+            // Принудительно обновляем страницу для инициализации хука useAuth
             setTimeout(() => {
-              router.push('/')
+              window.location.href = '/'
             }, 2000)
           } else {
             throw new Error(response.message || 'Токены не получены от сервера')
           }
         } else {
+          console.error('Неверные параметры OpenID:', {
+            openidMode,
+            openidSigned
+          })
           throw new Error('Неверные параметры авторизации Steam')
         }
       } catch (error) {
-        console.error('Ошибка авторизации:', error)
+        console.error('Ошибка авторизации в callback:', error)
         setStatus('error')
         setMessage(
           error instanceof Error

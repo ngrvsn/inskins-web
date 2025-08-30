@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { type TPaymentMethod } from '@/api/users/types'
 import styles from './PaymentCard.module.scss'
 
 // Импорт всех иконок
@@ -16,76 +17,132 @@ import tonIcon from '@/assets/icons/ton-payment.svg'
 import usdtErcIcon from '@/assets/icons/usdterc-payment.svg'
 import inskinsIcon from '@/assets/icons/inskins-payment.svg'
 
-// Конфигурация платежных методов
-const paymentMethodsConfig = {
-  cards: {
+// Конфигурация платежных методов с использованием API типов
+const paymentMethodsConfig: Record<
+  TPaymentMethod,
+  {
+    icon: any
+    title: string
+    showTitle: boolean
+    width: number
+    height: number
+  }
+> = {
+  card_ru: {
     icon: cardIcon,
-    title: 'Карты',
+    title: 'Карты РФ',
     showTitle: true,
     width: 28,
     height: 20
   },
-  sbp: { icon: sbpIcon, title: 'СБП', showTitle: false, width: 75, height: 36 },
-  'usdt-trc': {
+  card_visa: {
+    icon: cardIcon,
+    title: 'Visa',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
+  card_mastercard: {
+    icon: cardIcon,
+    title: 'Mastercard',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
+  sbp: {
+    icon: sbpIcon,
+    title: 'СБП',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  usdt_trc20: {
     icon: usdtTrcIcon,
     title: 'USDT TRC-20',
     showTitle: false,
     width: 75,
     height: 36
   },
-  binance: {
-    icon: binanceIcon,
-    title: 'BINANCE',
-    showTitle: false,
-    width: 77,
-    height: 16
-  },
-  usdc: {
-    icon: usdcIcon,
-    title: 'USDC TRC-20',
-    showTitle: false,
-    width: 75,
-    height: 36
-  },
-  bitcoin: {
-    icon: bitcoinIcon,
-    title: 'Bitcoin',
-    showTitle: false,
-    width: 77,
-    height: 18
-  },
-  ethereum: {
-    icon: ethereumIcon,
-    title: 'Ethereum',
-    showTitle: false,
-    width: 77,
-    height: 21
-  },
-  solana: {
-    icon: solanaIcon,
-    title: 'SOLANA',
-    showTitle: false,
-    width: 77,
-    height: 21
-  },
-  ton: { icon: tonIcon, title: 'TON', showTitle: false, width: 70, height: 30 },
-  'usdt-erc': {
+  usdt_erc20: {
     icon: usdtErcIcon,
     title: 'USDT ERC-20',
     showTitle: false,
     width: 75,
     height: 36
   },
-  inskins: {
+  usdt_bsc: {
+    icon: usdcIcon,
+    title: 'USDT BSC',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  btc: {
+    icon: bitcoinIcon,
+    title: 'Bitcoin',
+    showTitle: false,
+    width: 77,
+    height: 18
+  },
+  eth: {
+    icon: ethereumIcon,
+    title: 'Ethereum',
+    showTitle: false,
+    width: 77,
+    height: 21
+  },
+  sol: {
+    icon: solanaIcon,
+    title: 'Solana',
+    showTitle: false,
+    width: 77,
+    height: 21
+  },
+  ton: {
+    icon: tonIcon,
+    title: 'TON',
+    showTitle: false,
+    width: 70,
+    height: 30
+  },
+  bnb: {
+    icon: binanceIcon,
+    title: 'BNB',
+    showTitle: false,
+    width: 77,
+    height: 16
+  },
+  sepa: {
+    icon: cardIcon,
+    title: 'SEPA',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
+  paypal: {
+    icon: cardIcon,
+    title: 'PayPal',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
+  qiwi: {
+    icon: cardIcon,
+    title: 'QIWI',
+    showTitle: true,
+    width: 28,
+    height: 20
+  },
+  yandex_money: {
     icon: inskinsIcon,
-    title: 'Inskins Balance',
+    title: 'ЮMoney',
     showTitle: false,
     width: 77,
     height: 32
   }
-} as const
+}
 
-export type PaymentMethodId = keyof typeof paymentMethodsConfig
+export type PaymentMethodId = TPaymentMethod
 
 interface IPaymentCardProps {
   methodId: PaymentMethodId
@@ -124,17 +181,15 @@ export const PaymentCard = ({
   )
 }
 
-// Экспорт доступных методов для использования
+// Экспорт доступных методов для использования (основные методы для UI)
 export const PAYMENT_METHODS: PaymentMethodId[] = [
-  'cards',
+  'card_ru',
   'sbp',
-  'usdt-trc',
-  'binance',
-  'usdc',
-  'bitcoin',
-  'ethereum',
-  'solana',
+  'usdt_trc20',
+  'usdt_erc20',
+  'btc',
+  'eth',
+  'sol',
   'ton',
-  'usdt-erc',
-  'inskins'
+  'bnb'
 ] as const

@@ -153,3 +153,26 @@ export interface ITransactionsResponse {
   page?: number
   limit?: number
 }
+
+// Полные данные пользователя из /api/users/me
+export interface IUserMeData {
+  id: string
+  username: string
+  email: string
+  avatar: string
+  steamTradeUrl?: string
+  balance: number
+  currency: string
+  language: string
+  steamId: string
+  role?: string
+  status?: string
+}
+
+export interface IUserMeResponse {
+  success: boolean
+  data: IUserMeData
+  message: string
+  timestamp: string
+  requestId: string
+}

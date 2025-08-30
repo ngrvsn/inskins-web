@@ -6,7 +6,8 @@ import type {
   IInventoryWithPricesResponse,
   IInventoryByTradeUrlRequest,
   ITransactionFilters,
-  ITransactionsResponse
+  ITransactionsResponse,
+  IUserMeResponse
 } from './types'
 
 // Построение query параметров для фильтрации транзакций
@@ -77,5 +78,11 @@ export const getTransactions = async (
   const response = await privateApi.get(`/api/users/${steamId}/transactions`, {
     params
   })
+  return response.data
+}
+
+// Получить полную информацию о текущем пользователе
+export const getMe = async (): Promise<IUserMeResponse> => {
+  const response = await privateApi.get<IUserMeResponse>('/api/users/me')
   return response.data
 }

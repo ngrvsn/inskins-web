@@ -33,6 +33,38 @@
   margin-bottom: 8px;
 }
 
+.errorMessage {
+  color: #ff4444;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 8px;
+  text-align: center;
+}
+
 .loginButton {
   margin-top: 8px;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: rgba(73, 170, 25, 0.1);
+  border: 1px solid rgba(73, 170, 25, 0.3);
+  border-radius: 8px;
+}
+
+.loadingText {
+  color: #49aa19;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }

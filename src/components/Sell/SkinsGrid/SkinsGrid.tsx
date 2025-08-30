@@ -8,7 +8,8 @@ import {
   SearchInput,
   SortDropdown,
   SelectAllCheckbox,
-  RefreshButton
+  RefreshButton,
+  Spinner
 } from '@/components/ui'
 import { ISkinItem } from '@/types/skin'
 import { AuthPrompt } from '../AuthPrompt/AuthPrompt'
@@ -20,7 +21,7 @@ interface ISkinsGridProps {
   onSelectionChange: (selectedSkins: ISkinItem[]) => void
   steamLink?: string
   isAuthenticated?: boolean
-  onLogin?: () => void
+  isLoading?: boolean
 }
 
 interface IFilterState {
@@ -114,7 +115,7 @@ export const SkinsGrid = ({
   onSelectionChange,
   steamLink,
   isAuthenticated = true,
-  onLogin
+  isLoading = false
 }: ISkinsGridProps) => {
   const [filters, setFilters] = useState<IFilterState>({
     game: '',
@@ -189,7 +190,6 @@ export const SkinsGrid = ({
 
   const handleRefresh = () => {
     // Логика обновления данных
-    console.log('Обновление данных скинов')
   }
 
   const isAllSelected =
@@ -201,7 +201,7 @@ export const SkinsGrid = ({
       {/* Панель фильтров */}
       <div
         className={`${styles.filterPanel} ${
-          !isAuthenticated ? styles.disabled : ''
+          !isAuthenticated || isLoading ? styles.disabled : ''
         }`}
       >
         <GameSelector
@@ -231,7 +231,14 @@ export const SkinsGrid = ({
       <div className={styles.skinsGrid}>
         {!isAuthenticated ? (
           <div className={styles.authPrompt}>
-            <AuthPrompt onLogin={onLogin || (() => {})} />
+            <AuthPrompt />
+          </div>
+        ) : isLoading ? (
+          <div className={styles.loadingContainer}>
+            <Spinner size='large' color='green' />
+            <p className={styles.loadingText}>
+              Загрузка данных пользователя...
+            </p>
           </div>
         ) : (
           filteredSkins.map((skin) => (

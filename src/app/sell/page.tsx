@@ -5,7 +5,7 @@ import {
   Breadcrumbs,
   PageTitle,
   SteamLinkInput,
-  SteamLoginButton
+  Spinner
 } from '@/components/ui'
 import { SkinsGrid } from '@/components/Sell/SkinsGrid/SkinsGrid'
 import { PaymentSidebar } from '@/components/Sell/PaymentSidebar/PaymentSidebar'
@@ -14,14 +14,15 @@ import { Statistics } from '@/components/Statistics/Statistics'
 import InfoSection from '@/components/Sell/InfoSection/InfoSection'
 import { ISkinItem } from '@/types/skin'
 import { useAuth } from '@/hooks/useAuth'
+import { type PaymentMethodId } from '@/components/ui/PaymentCard/PaymentCard'
 import styles from './page.module.scss'
 
 export default function SellPage() {
-  const { isAuthenticated, login } = useAuth()
+  const { isAuthenticated, isLoading, error } = useAuth()
   const [steamLink, setSteamLink] = useState<string>('')
   const [selectedSkins, setSelectedSkins] = useState<ISkinItem[]>([])
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<string>('sbp')
+    useState<PaymentMethodId>('sbp')
 
   const breadcrumbItems = [{ label: 'Продать скины' }]
 
@@ -33,17 +34,27 @@ export default function SellPage() {
     setSelectedSkins(skins)
   }
 
-  const handlePaymentMethodChange = (method: string) => {
+  const handlePaymentMethodChange = (method: PaymentMethodId) => {
     setSelectedPaymentMethod(method)
   }
 
   const handleProceed = () => {
-    console.log('Proceeding with:', {
-      selectedSkins,
-      paymentMethod: selectedPaymentMethod,
-      steamLink
-    })
     // Здесь будет логика перехода к следующему шагу
+  }
+
+  // Показываем индикатор загрузки при проверке авторизации
+  if (isLoading) {
+    return (
+      <div className='container'>
+        <Breadcrumbs items={breadcrumbItems} />
+        <PageTitle>Продать скины</PageTitle>
+
+        <div className={styles.loadingContainer}>
+          <Spinner size='large' color='green' />
+          <p className={styles.loadingText}>Проверка авторизации...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -51,11 +62,14 @@ export default function SellPage() {
       <Breadcrumbs items={breadcrumbItems} />
       <PageTitle>Продать скины</PageTitle>
 
+      {/* Отображение ошибки авторизации */}
+      {error && <div className={styles.errorMessage}>{error}</div>}
+
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>
           <div
             className={`${styles.steamLinkSection} ${
-              !isAuthenticated ? styles.disabled : ''
+              !isAuthenticated || isLoading ? styles.disabled : ''
             }`}
           >
             <SteamLinkInput onLinkChange={handleLinkChange} />
@@ -64,13 +78,13 @@ export default function SellPage() {
             onSelectionChange={handleSelectionChange}
             steamLink={steamLink}
             isAuthenticated={isAuthenticated}
-            onLogin={login}
+            isLoading={isLoading}
           />
         </div>
 
         <div
           className={`${styles.rightColumn} ${
-            !isAuthenticated ? styles.disabled : ''
+            !isAuthenticated || isLoading ? styles.disabled : ''
           }`}
         >
           <PaymentSidebar
