@@ -1,74 +1,38 @@
-// Развернутые детали транзакции
 .transactionDetails {
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-}
-
-// Блоки деталей - плоские на полную ширину
-.detailBlock {
-  background: rgba(36, 36, 41, 0.6);
-  border-bottom: 1px solid rgba(12, 12, 12, 0.48);
-  padding: 20px;
-  margin: 0;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.blockTitle {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 16px;
-}
-
-.blockContent {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-// Статус
-.statusText {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-// Заголовки скинов
-.skinsHeader {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
   gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(12, 12, 12, 0.48);
-  margin-bottom: 16px;
 }
 
-.headerCell {
+.status {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.headers {
+  display: grid;
+  grid-template-columns: 50% 30% 20%;
+  gap: 20px;
+  align-items: center;
+}
+
+.headerItem {
+  color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  line-height: 18px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-// Данные скинов
-.skinsData {
-  display: flex;
-  flex-direction: column;
-}
-
-.skinRow {
+.values {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 16px;
+    grid-template-columns: 30% 42% 11.5%;
+  gap: 20px;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(12, 12, 12, 0.48);
-
-  &:last-child {
-    border-bottom: none;
-  }
 }
 
 .skinInfo {
@@ -78,114 +42,31 @@
 }
 
 .skinImage {
-  width: 40px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .skinName {
+  color: #FFF;
   font-size: 14px;
-  color: #fff;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 22px;
 }
 
-.skinGame {
+.gameValue {
+  color: #FFF;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  line-height: 22px;
+  text-align: center;
+  min-width: 60px;
 }
 
-.skinPrice {
+.priceValue {
+  color: #FFF;
   font-size: 14px;
-  color: #49aa19;
-  font-weight: 500;
-}
-
-// Информация о транзакции (когда нет скинов)
-.transactionInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.infoRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(12, 12, 12, 0.48);
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.infoLabel {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.infoValue {
-  font-size: 14px;
-  color: #fff;
-  font-weight: 500;
-}
-
-// Адаптивность
-@media (max-width: 768px) {
-  .detailBlock {
-    padding: 16px;
-  }
-
-  .blockTitle {
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-
-  .skinsHeader {
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 12px;
-    padding: 10px 0;
-    margin-bottom: 12px;
-  }
-
-  .headerCell {
-    font-size: 11px;
-  }
-
-  .skinRow {
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 12px;
-    padding: 10px 0;
-  }
-
-  .skinInfo {
-    gap: 8px;
-  }
-
-  .skinImage {
-    width: 32px;
-    height: 24px;
-  }
-
-  .skinName {
-    font-size: 13px;
-  }
-
-  .skinGame,
-  .skinPrice {
-    font-size: 13px;
-  }
-
-  .infoRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 10px 0;
-  }
-
-  .infoLabel,
-  .infoValue {
-    font-size: 13px;
-  }
+  font-weight: 600;
+  line-height: 22px;
+  text-align: right;
+  min-width: 80px;
 }

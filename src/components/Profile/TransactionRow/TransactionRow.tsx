@@ -1,16 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { IProfileTransaction } from '@/types/transaction'
-import { TransactionDetails } from '../TransactionDetails'
+import { IUserTransaction } from '@/api/users/types'
+import {TransactionDetails} from '../TransactionDetails/TransactionDetails'
+import Image from 'next/image'
+import dropdownIcon from '@/assets/icons/white-dropdown-arrow.svg'
 import styles from './TransactionRow.module.scss'
 
 interface ITransactionRowProps {
-  transaction: IProfileTransaction
+  transaction: IUserTransaction
 }
 
 export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
+
+  // Показываем только продажи скинов
+  if (transaction.type !== 'order_payout') {
+    return null
+  }
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded)
@@ -18,14 +25,8 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'sale':
-        return 'Продажа'
-      case 'purchase':
-        return 'Покупка'
-      case 'deposit':
-        return 'Пополнение'
-      case 'withdrawal':
-        return 'Вывод'
+      case 'order_payout':
+        return 'Продажа скинов'
       default:
         return type
     }
@@ -34,11 +35,13 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'Оплачено'
+        return 'Завершено'
       case 'cancelled':
         return 'Отменено'
       case 'pending':
         return 'В обработке'
+      case 'failed':
+        return 'Ошибка'
       default:
         return status
     }
@@ -57,7 +60,8 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
     }
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
     return new Intl.DateTimeFormat('ru-RU', {
       day: '2-digit',
       month: '2-digit',
@@ -71,9 +75,56 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
     return `${amount.toFixed(2)} ${currency}`
   }
 
-  const formatBalanceChange = (change: number, currency: string) => {
+  const getPaymentMethodLabel = (method?: string) => {
+    if (!method) return 'Не указан'
+
+    switch (method) {
+      case 'sbp':
+        return 'СБП'
+      case 'card_ru':
+        return 'Банковская карта'
+      case 'qiwi':
+        return 'Qiwi'
+      case 'yandex_money':
+        return 'ЮMoney'
+      case 'usdt_trc20':
+        return 'USDT TRC20'
+      case 'usdt_erc20':
+        return 'USDT ERC20'
+      case 'btc':
+        return 'Bitcoin'
+      case 'eth':
+        return 'Ethereum'
+      default:
+        return method
+    }
+  }
+
+  const getDestination = (type: string, method?: string) => {
+    switch (type) {
+      case 'order_payout':
+        return getPaymentMethodLabel(method)
+      case 'deposit':
+        return 'Баланс INSKINS'
+      case 'withdrawal':
+        return getPaymentMethodLabel(method)
+      case 'purchase':
+        return 'Инвентарь Steam'
+      default:
+        return 'Не указано'
+    }
+  }
+
+  const getBalanceChange = (type: string, amount: number) => {
+    const isPositive = [
+      'deposit',
+      'order_payout',
+      'referral_reward',
+      'promo_bonus'
+    ].includes(type)
+    const change = isPositive ? amount : -amount
     const sign = change >= 0 ? '+' : ''
-    return `${sign}${change.toFixed(2)} ${currency}`
+    return `${sign}${change.toFixed(2)}`
   }
 
   return (
@@ -84,32 +135,24 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
             <div className={styles.typeInfo}>
               <div className={styles.type}>
                 {getTypeLabel(transaction.type)}
-              </div>
-              <div className={styles.date}>{formatDate(transaction.date)}</div>
-            </div>
-            <div className={styles.expandButton}>
-              <svg
-                className={`${styles.expandIcon} ${
+                <Image
+                  src={dropdownIcon}
+                  alt='dropdown'
+                  width={12}
+                  height={12}
+                   className={`${styles.expandIcon} ${
                   isExpanded ? styles.expanded : ''
                 }`}
-                width='16'
-                height='16'
-                viewBox='0 0 16 16'
-                fill='none'
-              >
-                <path
-                  d='M4 6L8 10L12 6'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
                 />
-              </svg>
+              </div>
+              <div className={styles.date}>
+                {formatDate(transaction.createdAt)}
+              </div>
             </div>
           </div>
         </div>
         <div className={styles.cell}>
-          <span className={styles.transactionId}>#{transaction.id}</span>
+          <span className={styles.transactionId}>{transaction.id}</span>
         </div>
         <div className={styles.cell}>
           <div
@@ -129,22 +172,29 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
         </div>
         <div className={styles.cell}>
           <span className={styles.paymentSystem}>
-            {transaction.paymentSystem}
+            {getPaymentMethodLabel(transaction.method)}
           </span>
         </div>
         <div className={styles.cell}>
-          <span className={styles.destination}>{transaction.destination}</span>
+          <span className={styles.destination}>
+            {getDestination(transaction.type, transaction.method)}
+          </span>
         </div>
         <div className={styles.cell}>
           <span
             className={`${styles.balanceChange} ${
-              transaction.balanceChange >= 0 ? styles.positive : styles.negative
+              [
+                'deposit',
+                'order_payout',
+                'referral_reward',
+                'promo_bonus'
+              ].includes(transaction.type)
+                ? styles.positive
+                : styles.negative
             }`}
           >
-            {formatBalanceChange(
-              transaction.balanceChange,
-              transaction.currency
-            )}
+            {getBalanceChange(transaction.type, transaction.amount)}{' '}
+            {transaction.currency}
           </span>
         </div>
       </div>

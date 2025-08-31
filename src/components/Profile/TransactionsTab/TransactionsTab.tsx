@@ -3,118 +3,102 @@
 import { useState, useMemo } from 'react'
 import { SearchInput } from '@/components/ui'
 import { TransactionRow } from '../TransactionRow/TransactionRow'
-import { ITransactionFilters, IProfileTransaction } from '@/types/transaction'
+import { IUserTransaction } from '@/api/users/types'
 import styles from './TransactionsTab.module.scss'
 
 interface ITransactionsTabProps {
   // Пока без пропсов, добавим позже при интеграции с данными
 }
 
-// Моковые данные транзакций
-const mockTransactions: IProfileTransaction[] = [
+// Простые фильтры для поиска
+interface ISimpleTransactionFilters {
+  transactionId: string
+  description: string
+}
+
+// Моковые данные транзакций в формате API
+const mockTransactions: IUserTransaction[] = [
   {
     id: 'TXN001234',
-    type: 'sale',
-    date: new Date('2024-01-15T14:30:00'),
+    userId: 'user1',
+    steamId: '76561198000000001',
+    type: 'order_payout',
     status: 'completed',
-    amount: 1250.75,
+    method: 'sbp',
     currency: 'RUB',
-    paymentSystem: 'Steam Wallet',
-    destination: 'Баланс Steam',
-    balanceChange: 1250.75,
-    skins: [
-      {
-        id: 'skin1',
-        name: 'AK-47 | Redline',
-        game: 'CS:GO',
-        price: 850.5,
-        image: '/placeholder-skin.png'
-      },
-      {
-        id: 'skin2',
-        name: 'AWP | Dragon Lore',
-        game: 'CS:GO',
-        price: 400.25,
-        image: '/placeholder-skin.png'
-      }
-    ]
+    amount: 1250.75,
+    relatedOrderId: 'ORD001',
+    createdAt: '2024-01-15T14:30:00Z',
+    updatedAt: '2024-01-15T14:35:00Z',
+    description: 'Выплата за продажу предметов'
   },
   {
     id: 'TXN001235',
+    userId: 'user1',
+    steamId: '76561198000000001',
     type: 'purchase',
-    date: new Date('2024-01-14T10:15:00'),
     status: 'completed',
-    amount: 750.0,
+    method: 'card_ru',
     currency: 'RUB',
-    paymentSystem: 'Банковская карта',
-    destination: 'Инвентарь Steam',
-    balanceChange: -750.0,
-    skins: [
-      {
-        id: 'skin3',
-        name: 'M4A4 | Howl',
-        game: 'CS:GO',
-        price: 750.0,
-        image: '/placeholder-skin.png'
-      }
-    ]
+    amount: 750.0,
+    createdAt: '2024-01-14T10:15:00Z',
+    updatedAt: '2024-01-14T10:20:00Z',
+    description: 'Покупка предметов'
   },
   {
     id: 'TXN001236',
+    userId: 'user1',
+    steamId: '76561198000000001',
     type: 'deposit',
-    date: new Date('2024-01-13T16:45:00'),
     status: 'completed',
-    amount: 2000.0,
+    method: 'qiwi',
     currency: 'RUB',
-    paymentSystem: 'Qiwi',
-    destination: 'Баланс INSKINS',
-    balanceChange: 2000.0
+    amount: 2000.0,
+    createdAt: '2024-01-13T16:45:00Z',
+    updatedAt: '2024-01-13T16:50:00Z',
+    description: 'Пополнение баланса'
   },
   {
     id: 'TXN001237',
-    type: 'sale',
-    date: new Date('2024-01-12T09:20:00'),
+    userId: 'user1',
+    steamId: '76561198000000001',
+    type: 'order_payout',
     status: 'cancelled',
-    amount: 500.0,
+    method: 'sbp',
     currency: 'RUB',
-    paymentSystem: 'Steam Wallet',
-    destination: 'Баланс Steam',
-    balanceChange: 0,
-    skins: [
-      {
-        id: 'skin4',
-        name: 'Glock-18 | Fade',
-        game: 'CS:GO',
-        price: 500.0,
-        image: '/placeholder-skin.png'
-      }
-    ]
+    amount: 500.0,
+    relatedOrderId: 'ORD002',
+    createdAt: '2024-01-12T09:20:00Z',
+    updatedAt: '2024-01-12T09:25:00Z',
+    description: 'Отмененная выплата за продажу'
   },
   {
     id: 'TXN001238',
+    userId: 'user1',
+    steamId: '76561198000000001',
     type: 'withdrawal',
-    date: new Date('2024-01-11T13:10:00'),
     status: 'pending',
-    amount: 1500.0,
+    method: 'card_ru',
     currency: 'RUB',
-    paymentSystem: 'Банковская карта',
-    destination: 'Банковский счет',
-    balanceChange: -1500.0
+    amount: 1500.0,
+    createdAt: '2024-01-11T13:10:00Z',
+    updatedAt: '2024-01-11T13:10:00Z',
+    description: 'Вывод средств на карту'
   }
 ]
 
 export const TransactionsTab = ({}: ITransactionsTabProps) => {
-  const [filters, setFilters] = useState<ITransactionFilters>({
+  const [filters, setFilters] = useState<ISimpleTransactionFilters>({
     transactionId: '',
-    skinName: ''
+    description: ''
   })
 
   const handleTransactionIdChange = (value: string) => {
     setFilters((prev) => ({ ...prev, transactionId: value }))
   }
 
-  const handleSkinNameChange = (value: string) => {
-    setFilters((prev) => ({ ...prev, skinName: value }))
+  const handleDescriptionChange = (value: string) => {
+    setFilters((prev) => ({ ...prev, description: value }))
   }
 
   // Фильтрация транзакций
@@ -126,33 +110,31 @@ export const TransactionsTab = ({}: ITransactionsTabProps) => {
             .includes(filters.transactionId.toLowerCase())
         : true
 
-      const matchesSkin = filters.skinName
-        ? transaction.skins?.some((skin) =>
-            skin.name.toLowerCase().includes(filters.skinName.toLowerCase())
-          ) || false
+      const matchesDescription = filters.description
+        ? transaction.description
+            ?.toLowerCase()
+            .includes(filters.description.toLowerCase()) || false
         : true
 
-      return matchesId && matchesSkin
+      return matchesId && matchesDescription
     })
   }, [filters])
 
   return (
     <div className={styles.transactionsTab}>
-      {/* Заголовок раздела */}
-      <h3 className={styles.sectionTitle}>История транзакций</h3>
 
       {/* Поля поиска */}
       <div className={styles.searchFilters}>
         <SearchInput
           value={filters.transactionId}
           onChange={handleTransactionIdChange}
-          placeholder='Поиск по ID транзакции'
+          placeholder='ID транзакции'
           className={styles.searchField}
         />
         <SearchInput
-          value={filters.skinName}
-          onChange={handleSkinNameChange}
-          placeholder='Поиск по названию скина'
+          value={filters.description}
+          onChange={handleDescriptionChange}
+          placeholder='Название скина'
           className={styles.searchField}
         />
       </div>
@@ -178,7 +160,7 @@ export const TransactionsTab = ({}: ITransactionsTabProps) => {
             ))
           ) : (
             <div className={styles.emptyState}>
-              {filters.transactionId || filters.skinName
+              {filters.transactionId || filters.description
                 ? 'Транзакции по заданным фильтрам не найдены'
                 : 'Транзакции не найдены'}
             </div>

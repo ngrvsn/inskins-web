@@ -6,6 +6,7 @@ import styles from './SteamLinkInput.module.scss'
 interface ISteamLinkInputProps {
   onLinkChange: (link: string) => void
   initialValue?: string
+  withTitle?: boolean
 }
 
 interface IFormData {
@@ -14,13 +15,11 @@ interface IFormData {
 
 export const SteamLinkInput = ({
   onLinkChange,
-  initialValue = ''
+  initialValue = '',
+  withTitle
 }: ISteamLinkInputProps) => {
   const {
     register,
-    handleSubmit,
-    watch,
-    setValue,
     formState: { errors }
   } = useForm<IFormData>({
     defaultValues: {
@@ -44,13 +43,13 @@ export const SteamLinkInput = ({
     )
   }
 
-  const watchedLink = watch('steamLink')
-
   return (
     <div className={styles.container}>
-      <label className={styles.label}>
-        Вставьте свою <span className={styles.highlight}>ссылку</span> на обмен:
-      </label>
+      {withTitle && (
+        <label className={styles.label}>
+          Вставьте свою <span className={styles.highlight}>ссылку</span> на обмен:
+        </label>
+      )}
 
       <div className={styles.inputWrapper}>
         <input

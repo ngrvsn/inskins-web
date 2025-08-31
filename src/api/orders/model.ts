@@ -119,15 +119,19 @@ export const createOrder = async (data: ICreateOrderRequest): Promise<IOrder> =>
   return response.data
 }
 
-// Получить список заказов текущего пользователя с возможностью фильтрации
-export const getMyOrders = async (filters?: IOrderFilters): Promise<IOrdersResponse> => {
-  let url = '/api/orders/my'
+// Получить список заказов пользователя по steamId с возможностью фильтрации
+export const getMyOrders = async (steamId: string, filters?: IOrderFilters): Promise<IOrdersResponse> => {
+  // Добавляем steamId в фильтры
+  const filtersWithSteamId = {
+    ...filters,
+    steamId
+  }
 
-  if (filters) {
-    const queryParams = buildOrderFilters(filters)
-    if (queryParams.toString()) {
-      url += `?${queryParams.toString()}`
-    }
+  let url = '/api/orders/my'
+  const queryParams = buildOrderFilters(filtersWithSteamId)
+
+  if (queryParams.toString()) {
+    url += `?${queryParams.toString()}`
   }
 
   const response = await privateApi.get<IOrdersResponse>(url)

@@ -154,19 +154,58 @@ export interface ITransactionsResponse {
   limit?: number
 }
 
-// Полные данные пользователя из /api/users/me
+// Полные данные пользователя из /api/users/{steamId}
 export interface IUserMeData {
-  id: string
-  username: string
-  email: string
-  avatar: string
-  steamTradeUrl?: string
-  balance: number
-  currency: string
-  language: string
   steamId: string
-  role?: string
-  status?: string
+  steamLogin: string
+  steamNickname: string
+  steamAvatar: string
+  steamProfileUrl: string
+  steamTradeUrl: string
+  email: string
+  isEmailVerified: boolean
+  telegram: string
+  language: string
+  lastLoginAt: string
+  registeredAt: string
+  status: string
+  role: string
+  countryCode: string
+  timezone: string
+  preferences: {
+    theme: string
+    notifications: boolean
+  }
+  displayName: string
+  createdAt: string
+  updatedAt: string
+  balance: number
+  holdBalance: number
+  currency: string
+  withdrawMethods: string[]
+  totalWithdrawn: number
+  totalDeposited: number
+  promoCodesUsed: string[]
+  referralCode: string
+  referralRewardPercent: number
+  totalEarned: number
+  referralBalance: number
+  refereesCount: number
+  isBanned: boolean
+  isWithdrawBlocked: boolean
+  orderHistory: Array<{
+    orderId: string
+    items: Array<{
+      marketName: string
+      price: number
+      iconUrl: string
+      quantity: number
+    }>
+    totalAmount: number
+    status: string
+    createdAt: string
+    lastUpdatedAt: string
+  }>
 }
 
 export interface IUserMeResponse {

@@ -9,7 +9,7 @@ interface IUserAvatarProps {
   size?: number
 }
 
-export const UserAvatar = ({ src, alt, size = 80 }: IUserAvatarProps) => {
+export const UserAvatar = ({ src, alt, size = 130 }: IUserAvatarProps) => {
   return (
     <div
       className={styles.avatarContainer}

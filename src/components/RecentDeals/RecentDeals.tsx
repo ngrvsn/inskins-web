@@ -45,6 +45,9 @@ const mockDeals = [
 export const RecentDeals = () => {
   return (
     <section className={styles.section}>
+      <div className={styles.rightTopEllipse}></div>
+      <div className={styles.rightBottomEllipse}></div>
+
       <div className={`${styles.container} container`}>
         <h2 className={styles.title}>Последние сделки</h2>
         <div className={styles.grid}>

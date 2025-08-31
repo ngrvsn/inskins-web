@@ -1,7 +1,7 @@
 // Строка транзакции
 .transactionRow {
   display: grid;
-  grid-template-columns: 20% 12% 12% 14% 16% 12% 14%;
+  grid-template-columns: 14% 12% 15% 14% 15% 15% 15%;
   align-items: center;
   padding: 16px 20px;
   gap: 12px;
@@ -39,24 +39,35 @@
 .typeInfo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .type {
-  font-weight: 500;
-  color: #fff;
+    color:  rgba(255, 255, 255, 0.85);
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height:  22px; /* 137.5% */
+display: flex;
+gap: 3px;
+align-items: center;
 }
 
 .date {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+color: rgba(177, 177, 177, 0.70);
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 22px; /* 157.143% */
 }
 
 // ID транзакции
 .transactionId {
   font-family: monospace;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 22px; /* 157.143% */
 }
 
 // Статусы как теги с обводкой
@@ -73,7 +84,7 @@
 
 .statusText {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .statusCompleted {

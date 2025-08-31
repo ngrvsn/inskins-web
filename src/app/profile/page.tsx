@@ -7,15 +7,15 @@ import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import { ProfileInfoBlock } from '@/components/Profile/ProfileInfoBlock/ProfileInfoBlock'
 import { ProfileTabs } from '@/components/Profile/ProfileTabs/ProfileTabs'
 import { useAuth } from '@/hooks/useAuth'
-import { IUser } from '@/types'
+import { IUserMeData } from '@/api/users/types'
 import styles from './page.module.scss'
 
 const ProfilePage = () => {
   const router = useRouter()
   const { isAuthenticated } = useAuth()
 
-  // Моковые данные пользователя
-  const [user, setUser] = useState<IUser>({
+  // Моковые данные пользователя в формате API
+  const [user, setUser] = useState<IUserMeData>({
     id: '1',
     username: 'PlayerName',
     email: 'player@example.com',
@@ -23,7 +23,8 @@ const ProfilePage = () => {
     steamTradeUrl: '',
     balance: 1250.5,
     currency: 'RUB',
-    language: 'ru'
+    language: 'ru',
+    steamId: '76561198000000001'
   })
 
   useEffect(() => {

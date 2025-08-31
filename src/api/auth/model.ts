@@ -142,7 +142,7 @@ export const logout = async (): Promise<ILogoutResponse> => {
 }
 
 // Получить информацию о текущем пользователе
-export const getMe = async (): Promise<any> => {
+export const getMe = async (): Promise<{ id: string; steamId: string; role: string; status: string }> => {
   const response = await privateApi.get('/api/auth/me')
   return response.data
 }

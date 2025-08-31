@@ -10,6 +10,44 @@
   padding: 32px;
   margin-top: 24px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.26) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.26) 1px, transparent 1px);
+    background-size: 60px 60px;
+    border-radius: 16px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 30%;
+    background: rgba(255, 255, 255, 0.05);
+    filter: blur(80px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
 }
 
 .title {

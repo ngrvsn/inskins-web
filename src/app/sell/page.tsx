@@ -72,7 +72,7 @@ export default function SellPage() {
               !isAuthenticated || isLoading ? styles.disabled : ''
             }`}
           >
-            <SteamLinkInput onLinkChange={handleLinkChange} />
+            <SteamLinkInput onLinkChange={handleLinkChange} withTitle />
           </div>
           <SkinsGrid
             onSelectionChange={handleSelectionChange}

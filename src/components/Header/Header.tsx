@@ -11,11 +11,18 @@ import cartIcon from '@/assets/icons/cart.svg'
 import { CurrencySelector, SteamLoginButton, Spinner } from '@/components/ui'
 import { BalanceModal } from '@/components/BalanceModal/BalanceModal'
 import { useAuth } from '@/hooks/useAuth'
+import { useProfile } from '@/hooks/useProfile'
 
 export const Header = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const { isAuthenticated, user, logout, isLoading, error } = useAuth()
+  const { isAuthenticated, logout, isLoading: authLoading } = useAuth()
+  const {
+    profileData,
+    isLoading: profileLoading,
+    error: profileError,
+    refreshProfile
+  } = useProfile()
 
   const [activeTab, setActiveTab] = useState('buy') // 'buy' или 'sell'
   const [activeNavItem, setActiveNavItem] = useState('main') // 'main', 'market', 'blog', 'faq'
@@ -29,6 +36,17 @@ export const Header = () => {
     // Можно добавить toast уведомление или другую обработку ошибок
     console.error('Ошибка авторизации в Header:', error)
   }
+
+  // Определяем состояние загрузки - показываем спиннер если загружается авторизация или профиль
+  const isLoading = authLoading || (isAuthenticated && profileLoading)
+
+  // Обработка ошибок профиля
+  useEffect(() => {
+    if (profileError) {
+      console.error('Ошибка загрузки профиля в Header:', profileError)
+      // Можно добавить toast уведомление
+    }
+  }, [profileError])
 
   const handleLogout = async () => {
     try {
@@ -58,6 +76,14 @@ export const Header = () => {
   const handleProfileClick = () => {
     router.push('/profile')
     setIsProfileDropdownOpen(false)
+  }
+
+  const handleRetryProfile = async () => {
+    try {
+      await refreshProfile()
+    } catch (error) {
+      console.error('Ошибка повторной загрузки профиля:', error)
+    }
   }
 
   const handleBuyClick = () => {
@@ -198,7 +224,7 @@ export const Header = () => {
               >
                 <Image
                   src={
-                    user?.avatar ||
+                    profileData?.steamAvatar ||
                     'https://via.placeholder.com/28x28/49AA19/ffffff?text=U'
                   }
                   alt='Аватар'
@@ -208,11 +234,10 @@ export const Header = () => {
                 />
                 <div className={styles.balanceInfo}>
                   <span className={styles.balance}>
-                    {user?.balance?.toFixed(2) || '0.00'}{' '}
-                    {user?.currency || '₽'}
+                    {profileData?.balance?.toFixed(2) || '0.00'}{' '}
+                    {profileData?.currency || '₽'}
                     <span className={styles.balanceSecondary}>
-                      ({user?.balance?.toFixed(2) || '0.00'}
-                      {user?.currencySecondary || '$'})
+                      ({profileData?.balance?.toFixed(2) || '0.00'} USD)
                     </span>
                   </span>
                 </div>
@@ -229,48 +254,68 @@ export const Header = () => {
 
               {isProfileDropdownOpen && (
                 <div className={styles.profileDropdown}>
-                  <div className={styles.dropdownHeader}>
-                    <span className={styles.usernameLabel}>Username</span>
-                    <span className={styles.username}>
-                      {user?.username || 'Пользователь'}
-                    </span>
-                  </div>
+                  {profileError ? (
+                    <div className={styles.dropdownError}>
+                      <span className={styles.errorText}>
+                        Ошибка загрузки профиля
+                      </span>
+                      <button
+                        className={styles.retryButton}
+                        onClick={handleRetryProfile}
+                      >
+                        Повторить
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={styles.dropdownHeader}>
+                        <span className={styles.usernameLabel}>Username</span>
+                        <span className={styles.username}>
+                          {profileData?.displayName ||
+                            profileData?.steamNickname ||
+                            'Пользователь'}
+                        </span>
+                      </div>
 
-                  <div className={styles.dropdownSeparator}></div>
+                      <div className={styles.dropdownSeparator}></div>
 
-                  <div className={styles.dropdownMenu}>
-                    <button
-                      className={styles.dropdownItem}
-                      onClick={handleDepositClick}
-                    >
-                      Пополнить баланс
-                    </button>
-                    <button
-                      className={styles.dropdownItem}
-                      onClick={handleWithdrawClick}
-                    >
-                      Вывести с баланса
-                    </button>
-                    <button
-                      className={styles.dropdownItem}
-                      onClick={handleProfileClick}
-                    >
-                      Личный кабинет
-                    </button>
-                    <button className={styles.dropdownItem}>Инвентарь</button>
-                    <button className={styles.dropdownItem}>
-                      Реферальный кабинет
-                    </button>
-                  </div>
+                      <div className={styles.dropdownMenu}>
+                        <button
+                          className={styles.dropdownItem}
+                          onClick={handleDepositClick}
+                        >
+                          Пополнить баланс
+                        </button>
+                        <button
+                          className={styles.dropdownItem}
+                          onClick={handleWithdrawClick}
+                        >
+                          Вывести с баланса
+                        </button>
+                        <button
+                          className={styles.dropdownItem}
+                          onClick={handleProfileClick}
+                        >
+                          Личный кабинет
+                        </button>
+                        <button className={styles.dropdownItem}>
+                          Инвентарь
+                        </button>
+                        <button className={styles.dropdownItem}>
+                          Реферальный кабинет
+                        </button>
+                      </div>
 
-                  <div className={styles.dropdownSeparator}></div>
+                      <div className={styles.dropdownSeparator}></div>
 
-                  <button
-                    className={styles.logoutButton}
-                    onClick={handleLogout}
-                  >
-                    Выйти
-                  </button>
+                      <button
+                        className={styles.logoutButton}
+                        onClick={handleLogout}
+                      >
+                        Выйти
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>

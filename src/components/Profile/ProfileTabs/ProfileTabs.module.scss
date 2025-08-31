@@ -1,11 +1,11 @@
 .profileTabs {
-  margin-top: 32px;
+  margin-top: 20px;
 }
 
 .tabsNavigation {
   display: flex;
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 
   // Серая полоска на всю ширину
   &::after {
@@ -22,10 +22,15 @@
 .tabButton {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 16px;
-  font-weight: 500;
-  padding: 16px 24px;
+  color:  #B1B1B1;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height:  24px; /* 133.333% */
+  display: flex;
+padding: 21px 30px;
+justify-content: center;
+align-items: center;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;

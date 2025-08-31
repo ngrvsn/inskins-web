@@ -5,14 +5,6 @@
   gap: 24px;
 }
 
-// Заголовок раздела
-.sectionTitle {
-  font-size: 20px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0;
-}
-
 // Поля поиска
 .searchFilters {
   display: flex;
@@ -38,7 +30,7 @@
 // Заголовки таблицы
 .tableHeader {
   display: grid;
-  grid-template-columns: 20% 12% 12% 14% 16% 12% 14%;
+  grid-template-columns: 14% 12% 15% 14% 15% 15% 15%;
   background: rgba(36, 36, 41, 0.6);
   height: 48px;
   align-items: center;
@@ -48,11 +40,11 @@
 }
 
 .headerCell {
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+ color:  rgba(255, 255, 255, 0.85);
+font-size:  14px;
+font-style: normal;
+font-weight: 600;
+line-height:  22px; /* 157.143% */
 }
 
 // Тело таблицы

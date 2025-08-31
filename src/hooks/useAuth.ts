@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { IUser } from '@/types'
 import {
   getSteamAuthUrl,
   getMe as getAuthMe,
@@ -10,11 +9,11 @@ import {
   clearTokensFromStorage
 } from '@/api/auth'
 
-interface IAuthUser extends IUser {
-  currencySecondary: string
-  steamId?: string
-  role?: string
-  status?: string
+interface IAuthUser {
+  id: string
+  steamId: string
+  role: string
+  status: string
 }
 
 export const useAuth = () => {
@@ -28,38 +27,19 @@ export const useAuth = () => {
     try {
       setError(null)
 
-
       // Получаем базовую информацию из auth/me
       const authResponse = await getAuthMe()
-      // Проверяем структуру ответа - может быть как с success, так и без
-      let authData: any
-      if (authResponse && typeof authResponse === 'object' && 'success' in authResponse) {
-        if (!authResponse.success) {
-          throw new Error('Ошибка получения данных авторизации')
-        }
-        authData = authResponse.data
-      } else if (authResponse && typeof authResponse === 'object' && 'id' in authResponse) {
-        // Если ответ пришел напрямую без обертки success
-        authData = authResponse
-      } else {
+
+      // Ответ приходит напрямую в формате { id, steamId, role, status }
+      if (!authResponse || typeof authResponse !== 'object' || !authResponse.id) {
         throw new Error('Неожиданная структура ответа от auth/me')
       }
 
-
-      // Создаем объект пользователя на основе данных из auth/me
       const userData: IAuthUser = {
-        id: authData.id,
-        username: `user_${authData.steamId}`,
-        email: '',
-        avatar: 'https://via.placeholder.com/32x32/49AA19/ffffff?text=U',
-        steamTradeUrl: '',
-        balance: 0,
-        currency: '₽',
-        language: 'ru',
-        steamId: authData.steamId,
-        role: authData.role,
-        status: authData.status,
-        currencySecondary: '$'
+        id: authResponse.id,
+        steamId: authResponse.steamId,
+        role: authResponse.role,
+        status: authResponse.status
       }
 
       setUser(userData)

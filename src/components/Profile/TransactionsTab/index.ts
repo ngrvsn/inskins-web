@@ -1,1 +1,0 @@
-export { TransactionsTab } from './TransactionsTab'

@@ -1,106 +1,64 @@
 'use client'
 
-import { IProfileTransaction } from '@/types/transaction'
+import Image from 'next/image'
+import { IUserTransaction } from '@/api/users/types'
+import mockCard from '@/assets/images/mockCard.png'
 import styles from './TransactionDetails.module.scss'
 
 interface ITransactionDetailsProps {
-  transaction: IProfileTransaction
+  transaction: IUserTransaction
 }
 
 export const TransactionDetails = ({
   transaction
 }: ITransactionDetailsProps) => {
-  const getStatusDetails = (status: string) => {
+  // Показываем детали только для продажи скинов
+  if (transaction.type !== 'order_payout') {
+    return null
+  }
+
+  const getStatusText = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'Транзакция успешно завершена'
+        return 'Обмен отменен, таймаут'
       case 'cancelled':
-        return 'Транзакция была отменена'
+        return 'Обмен отменен, таймаут'
       case 'pending':
         return 'Транзакция находится в обработке'
       default:
-        return 'Неизвестный статус'
+        return 'Обмен отменен, таймаут'
     }
   }
 
   return (
     <div className={styles.transactionDetails}>
-      {/* Блок статуса */}
-      <div className={styles.detailBlock}>
-        <div className={styles.blockTitle}>Статус</div>
-        <div className={styles.blockContent}>
-          <span className={styles.statusText}>
-            {getStatusDetails(transaction.status)}
-          </span>
-        </div>
+      {/* Статус в строчку */}
+      <div className={styles.status}>
+        Статус: • {getStatusText(transaction.status)}
       </div>
 
-      {/* Блок скинов */}
-      {transaction.skins && transaction.skins.length > 0 && (
-        <div className={styles.detailBlock}>
-          <div className={styles.blockTitle}>Предметы в транзакции</div>
-          <div className={styles.skinsHeader}>
-            <div className={styles.headerCell}>НАЗВАНИЕ СКИНА</div>
-            <div className={styles.headerCell}>ИГРА</div>
-            <div className={styles.headerCell}>ЦЕНА</div>
-          </div>
-          <div className={styles.skinsData}>
-            {transaction.skins.map((skin) => (
-              <div key={skin.id} className={styles.skinRow}>
-                <div className={styles.skinInfo}>
-                  <img
-                    src={skin.image}
-                    alt={skin.name}
-                    className={styles.skinImage}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = '/placeholder-skin.png'
-                    }}
-                  />
-                  <span className={styles.skinName}>{skin.name}</span>
-                </div>
-                <div className={styles.skinGame}>{skin.game}</div>
-                <div className={styles.skinPrice}>
-                  {skin.price.toFixed(2)} {transaction.currency}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Заголовки */}
+      <div className={styles.headers}>
+        <div className={styles.headerItem}>НАЗВАНИЕ СКИНА</div>
+        <div className={styles.headerItem}>ИГРА</div>
+        <div className={styles.headerItem}>ЦЕНА</div>
+      </div>
 
-      {/* Если нет скинов, показываем информацию о транзакции */}
-      {(!transaction.skins || transaction.skins.length === 0) && (
-        <div className={styles.detailBlock}>
-          <div className={styles.blockTitle}>Детали транзакции</div>
-          <div className={styles.transactionInfo}>
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>Тип операции:</span>
-              <span className={styles.infoValue}>
-                {transaction.type === 'sale'
-                  ? 'Продажа'
-                  : transaction.type === 'purchase'
-                  ? 'Покупка'
-                  : transaction.type === 'deposit'
-                  ? 'Пополнение'
-                  : 'Вывод'}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>Платежная система:</span>
-              <span className={styles.infoValue}>
-                {transaction.paymentSystem}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>Направление:</span>
-              <span className={styles.infoValue}>
-                {transaction.destination}
-              </span>
-            </div>
-          </div>
+      {/* Значения */}
+      <div className={styles.values}>
+        <div className={styles.skinInfo}>
+          <Image
+            src={mockCard}
+            alt="Скин"
+            width={58}
+            height={44}
+            className={styles.skinImage}
+          />
+          <span className={styles.skinName}>StatTrak™ Desert Eagle | Light Rail (Field-Tested)</span>
         </div>
-      )}
+        <div className={styles.gameValue}>CS:GO</div>
+        <div className={styles.priceValue}>185.42 ₽</div>
+      </div>
     </div>
   )
 }
