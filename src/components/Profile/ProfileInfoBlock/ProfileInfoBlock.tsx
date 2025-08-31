@@ -24,15 +24,15 @@ export const ProfileInfoBlock = ({
     <div className={styles.profileInfoBlock}>
       <div className={styles.leftSection}>
         <UserAvatar
-          src={user.avatar}
-          alt={`Аватар пользователя ${user.username}`}
+          src={user.steamAvatar}
+          alt={`Аватар пользователя ${user.displayName || user.steamNickname}`}
           size={130}
         />
       </div>
 
       <div className={styles.centerSection}>
         <UserInfo
-          username={user.username}
+          username={user.displayName || user.steamNickname}
           email={user.email}
           steamTradeUrl={user.steamTradeUrl || ''}
           onSteamLinkChange={onSteamLinkChange}

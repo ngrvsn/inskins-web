@@ -26,9 +26,11 @@ export const useAuth = () => {
   const loadUserData = useCallback(async (): Promise<void> => {
     try {
       setError(null)
+      console.log('useAuth - loadUserData - начинаем загрузку')
 
       // Получаем базовую информацию из auth/me
       const authResponse = await getAuthMe()
+      console.log('useAuth - loadUserData - ответ от auth/me:', authResponse)
 
       // Ответ приходит напрямую в формате { id, steamId, role, status }
       if (!authResponse || typeof authResponse !== 'object' || !authResponse.id) {
@@ -42,8 +44,10 @@ export const useAuth = () => {
         status: authResponse.status
       }
 
+      console.log('useAuth - loadUserData - userData:', userData)
       setUser(userData)
       setIsAuthenticated(true)
+      console.log('useAuth - loadUserData - успешно авторизован')
     } catch (error) {
       console.error('Ошибка загрузки данных пользователя:', error)
       setError('Ошибка загрузки данных пользователя')
@@ -61,11 +65,15 @@ export const useAuth = () => {
         setIsLoading(true)
         const accessToken = getAccessToken()
 
+        console.log('useAuth - initializeAuth - accessToken:', accessToken ? 'есть' : 'нет')
+
         if (accessToken) {
           // Если есть токен, пытаемся загрузить данные пользователя
+          console.log('useAuth - пытаемся загрузить данные пользователя')
           await loadUserData()
         } else {
           // Если токена нет, пользователь не авторизован
+          console.log('useAuth - токена нет, пользователь не авторизован')
           setIsAuthenticated(false)
           setUser(null)
         }

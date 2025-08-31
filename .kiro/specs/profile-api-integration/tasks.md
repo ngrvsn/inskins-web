@@ -1,10 +1,11 @@
 # План задач интеграции API в компоненты профиля
 
-- [x] 1. Создать хук useProfile для получения данных профиля
+- [x] 1. Исправить хук useProfile для правильного получения данных профиля
 
-  - Создать файл `src/hooks/useProfile.ts` с интеграцией `users/me` API
+  - Обновить `src/hooks/useProfile.ts` для использования `/api/users/{steamId}` вместо несуществующего `/api/users/me`
+  - Получать steamId из `getMe()` из `src/api/auth/model.ts` (эндпоинт `/api/auth/me`)
+  - Использовать полученный steamId для запроса к `/api/users/{steamId}`
   - Реализовать загрузку, кеширование и обработку ошибок
-  - Использовать `getMe()` из `src/api/users/model.ts`
   - ИГНОРИРОВАТЬ типы из `src/types` - использовать только типы из `src/api/users/types.ts`
   - _Требования: 2.1, 2.2, 2.3, 2.4_
 
@@ -34,44 +35,24 @@
   - Убрать ненужные маппинги и промежуточные типы
   - _Требования: 1.1, 3.1, 4.1_
 
-- [x] 5. Обновить компонент Header для отображения реальных данных
+- [ ] 5. Исправить компонент Header для корректного отображения данных профиля
 
-  - Интегрировать useProfile хук в `src/components/Header/Header.tsx`
-    Слушай а хули в хидере тогда данные не отображаются
+  - Исправить интеграцию useProfile хука в `src/components/Header/Header.tsx`
+  - Убедиться что useProfile правильно получает данные из `/api/users/{steamId}` используя steamId из `/api/auth/me`
+  - Заменить моковые данные пользователя на реальные из API
+  - Обновить отображение баланса, аватара и имени пользователя из правильных полей ответа
+  - Использовать `steamAvatar`, `displayName` или `steamNickname`, `balance`, `currency` из ответа
+  - Добавить обработку состояний загрузки и ошибок
+  - ИГНОРИРОВАТЬ существующие типы в Header - использовать только `IUserMeData` из `src/api/users/types.ts`
+  - _Требования: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-{ "steamId": "76561198123456789", "steamLogin": "steamuser123", "steamNickname": "Pro Gamer", "steamAvatar": "https://avatars.steamstatic.com/abc123.jpg", "steamProfileUrl": "https://steamcommunity.com/id/steamuser123", "steamTradeUrl": "https://steamcommunity.com/tradeoffer/new/?partner=123456789&token=abc123", "email": "user@example.com", "isEmailVerified": false, "telegram": "@username", "language": "en", "lastLoginAt": "2024-01-15T10:30:00Z", "registeredAt": "2024-01-01T00:00:00Z", "status": "active", "role": "user", "countryCode": "US", "timezone": "America/New_York", "preferences": { "theme": "dark", "notifications": true }, "displayName": "Pro Gamer", "createdAt": "2024-01-01T00:00:00Z", "updatedAt": "2024-01-15T12:00:00Z", "balance": 1500.5, "holdBalance": 100, "currency": "RUB", "withdrawMethods": [ "sbp", "usdt_trc20" ], "totalWithdrawn": 5000, "totalDeposited": 6500.5, "promoCodesUsed": [ "FIRST100", "WELCOME" ], "referralCode": "ABC123", "referralRewardPercent": 1.5, "totalEarned": 150.25, "referralBalance": 75.5, "refereesCount": 5, "isBanned": false, "isWithdrawBlocked": false, "orderHistory": [ { "orderId": "ORDER_20240115_103000_R4ND", "items": [ { "marketName": "AK-47 | Redline (Field-Tested)", "price": 1250.5, "iconUrl": "https://community.cloudflare.steamstatic.com/economy/image/example.png", "quantity": 1 } ], "totalAmount": 1275.5, "status": "completed", "createdAt": "2024-01-15T10:00:00Z", "lastUpdatedAt": "2024-01-15T12:00:00Z" } ] }
+- [x] 6. Исправить страницу профиля для корректного использования данных
 
-Вот запрос /api/users/{steamId}
-
-Там и аватар есть
-
-А стимайди у нас есть в
-
-/api/auth/me
-
-{ "id": "76561198225270236", "steamId": "76561198225270236", "role": "user", "status": "active" }
-
-НЕ ТРОГАЙ АВТОРИЗАЦИИ ХУК БЛЯДЬ
-/api/auth/me
-
-{ "id": "76561198225270236", "steamId": "76561198225270236", "role": "user", "status": "active" }
-
-ОТСЮДА БЕРЕШЬ АЙДИШНИК И ЮЗАЕШЬ ЗАПРОС ДЛЯ ПОЛУЧЕНИЯ ФУЛЛ ПРОФИЛЯ
-СУКА ВОТ ЭТО В ЮЗ ПРОФИЛЬ ПРОКИНЬ
-Вот запрос /api/users/{steamId}
-РЕСПОНС ВЫШЕ ЕСТЬ
-
-- Заменить моковые данные пользователя на реальные из API
-- Обновить отображение баланса, аватара и имени пользователя
-- Добавить обработку состояний загрузки и ошибок
-- ИГНОРИРОВАТЬ существующие типы в Header - использовать только `IUserMeData` из `src/api/users/types.ts`
-- _Требования: 1.1, 1.2, 1.3, 1.4, 1.5_
-
-- [ ] 6. Обновить страницу профиля для использования реальных данных
-
-  - Интегрировать useProfile хук в `src/app/profile/page.tsx`
-  - Заменить моковые данные пользователя на реальные
-  - Обновить компонент ProfileInfoBlock для работы с реальными данными
+  - Обновить интеграцию useProfile хука в `src/app/profile/page.tsx`
+  - Убедиться что данные получаются из правильного эндпоинта `/api/users/{steamId}`
+  - Заменить моковые данные пользователя на реальные из исправленного useProfile
+  - Обновить компонент ProfileInfoBlock для работы с реальной структурой данных
+  - Использовать правильные поля из ответа API: `steamNickname`, `displayName`, `steamAvatar`, `balance`, `currency`
   - Добавить обработку ошибок и состояний загрузки
   - ИГНОРИРОВАТЬ типы `IUser` - использовать только `IUserMeData` из `src/api/users/types.ts`
   - _Требования: 2.1, 2.2, 2.3, 2.4, 2.5_

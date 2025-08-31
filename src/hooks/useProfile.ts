@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { getMe } from '@/api/users/model'
+import { privateApi } from '@/api/config'
+import { getMe as getAuthMe } from '@/api/auth/model'
 import type { IUserMeData } from '@/api/users/types'
 
 interface IUseProfile {
@@ -22,20 +23,30 @@ export const useProfile = (): IUseProfile => {
     try {
       setError(null)
       setIsLoading(true)
+      console.log('useProfile - loadProfileData - начинаем загрузку')
 
-      // Получаем полные данные профиля из /api/users/me
-      const response = await getMe()
+      // Сначала получаем steamId из auth/me
+      const authResponse = await getAuthMe()
+      console.log('useProfile - loadProfileData - ответ от auth/me:', authResponse)
 
-      // Проверяем структуру ответа
-      if (!response.success) {
-        throw new Error(response.message || 'Ошибка получения данных профиля')
+      // Ответ приходит напрямую в формате { id, steamId, role, status }
+      if (!authResponse || typeof authResponse !== 'object' || !authResponse.steamId) {
+        throw new Error('Не удалось получить steamId из auth/me')
       }
+
+      const steamId = authResponse.steamId
+      console.log('useProfile - loadProfileData - steamId:', steamId)
+
+      // Теперь получаем полные данные профиля по steamId из /api/users/{steamId}
+      const response = await privateApi.get(`/api/users/${steamId}`)
+      console.log('useProfile - loadProfileData - ответ от /api/users:', response.data)
 
       if (!response.data) {
         throw new Error('Данные профиля отсутствуют в ответе')
       }
 
       setProfileData(response.data)
+      console.log('useProfile - loadProfileData - данные профиля загружены успешно')
     } catch (error) {
       console.error('Ошибка загрузки данных профиля:', error)
 

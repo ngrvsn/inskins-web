@@ -1,5 +1,7 @@
 // API методы для работы с пользователями
 
+import { IUserMeData } from '../auth'
+import { IUserMeData } from '../auth'
 import { privateApi } from '../config'
 import type {
   IInventoryResponse,
@@ -81,8 +83,8 @@ export const getTransactions = async (
   return response.data
 }
 
-// Получить полную информацию о текущем пользователе
-export const getMe = async (): Promise<IUserMeResponse> => {
-  const response = await privateApi.get<IUserMeResponse>('/api/users/me')
+// Получить полную информацию о пользователе по steamId
+export const getUserBySteamId = async (steamId: string): Promise<IUserMeData> => {
+  const response = await privateApi.get<IUserMeData>(`/api/users/${steamId}`)
   return response.data
 }
