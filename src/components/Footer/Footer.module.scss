@@ -32,16 +32,17 @@
 
 .description {
   color: #999;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 18px;
   margin: 0;
+  max-width: 250px;
 }
 
 // Навигация
 .navigation {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 40px;
+  justify-content: space-between;
 }
 
 .navColumn {
@@ -124,4 +125,63 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+/* Медиазапрос для экранов 900px и ниже */
+@media (max-width: 900px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 30px;
+  }
+
+  .leftSection {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .navigation {
+    justify-content: space-between;
+    display: flex;
+    gap: 20px;
+  }
+
+  .rightSection {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+
+  .socialSection {
+    align-items: flex-start;
+  }
+
+  .socialTitle {
+    display: none;
+  }
+
+  .controls {
+    gap: 16px;
+  }
+
+  .bottomSection {
+    gap: 20px;
+    text-align: center;
+  }
+  .description {
+    max-width: 100%;
+  }
+}
+
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 480px) {
+  .rightSection {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .controls {
+    gap: 12px;
+  }
 }

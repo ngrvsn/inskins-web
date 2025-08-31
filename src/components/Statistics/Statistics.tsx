@@ -29,12 +29,14 @@ export const Statistics = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Об INSKINS</h2>
+        <h2 className={styles.title}>ОБ INSKINS</h2>
         <div className={styles.stats}>
           {statisticsData.map((stat, index) => (
             <div key={stat.id} className={styles.statItem}>
+              <div className={styles.valueContainer}>
               <div className={styles.value}>{stat.value}</div>
               <div className={styles.label}>{stat.label}</div>
+              </div>
               {index < statisticsData.length - 1 && (
                 <div className={styles.separator}></div>
               )}

@@ -56,3 +56,29 @@
   font-size: 14px;
   font-weight: 500;
 }
+
+/* Медиазапрос для экранов 1252px и меньше */
+@media (max-width: 1252px) {
+  .mainContent {
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .leftColumn {
+    max-width: 100%;
+  }
+
+  .rightColumn {
+    width: 100%;
+  }
+
+  .steamLinkSection {
+    margin-bottom: 16px;
+  }
+
+  .infoSection {
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+}

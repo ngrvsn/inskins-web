@@ -6,6 +6,14 @@
   padding: 16px 20px;
 }
 
+/* Медиазапрос для экранов 1252px и меньше */
+@media (max-width: 1252px) {
+  .sidebar {
+    max-width: 100%;
+    padding: 20px 24px;
+  }
+}
+
 .selectionHeader {
   display: flex;
   align-items: center;

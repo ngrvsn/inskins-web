@@ -8,7 +8,7 @@
   &::before {
     content: '';
     position: absolute;
-    top: -100px;
+    top: -30px;
     left: 140px;
     width: 300px;
     height: 200px;
@@ -26,13 +26,13 @@
     position: absolute;
     bottom: -120px;
     left: 100px;
-    width: 250px;
-    height: 230px;
+    width: 240px;
+    height: 220px;
     background: var(--inskins-green, #49AA19);
     filter: blur(132px);
     border-radius: 50%;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.7;
     z-index: 1;
   }
 }
@@ -92,22 +92,44 @@
   width: 100%;
   overflow-x: auto;
   padding-bottom: 10px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  cursor: grab;
 
+  &:active {
+    cursor: grabbing;
+  }
+
+  /* Скрываем скроллбар для WebKit браузеров */
   &::-webkit-scrollbar {
-    height: 6px;
+    display: none;
   }
+}
 
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+/* Медиазапрос для экранов 1252px и меньше */
+@media (max-width: 1252px) {
+  .grid {
+    gap: 12px;
   }
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
+/* Медиазапрос для планшетов */
+@media (max-width: 1024px) {
+  .grid {
+    gap: 10px;
+  }
+}
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 768px) {
+  .grid {
+    gap: 16px;
+  }
+}
+
+/* Медиазапрос для маленьких мобильных */
+@media (max-width: 480px) {
+  .grid {
+    gap: 12px;
   }
 }

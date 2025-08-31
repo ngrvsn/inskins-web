@@ -20,19 +20,68 @@
 .skinsGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px 7px;
   padding: 12px;
+  justify-content: flex-start;
   border-radius: 16px;
   background: rgba(19, 20, 25, 0.6);
+  width: 100%;
 
   // Центрирование для AuthPrompt и загрузки
   &:has(.authPrompt),
   &:has(.loadingContainer) {
     justify-content: center;
     align-items: center;
-    min-height: 400px;
+
+  }
+
+  > * {
+    width: 19.3%;
+    flex-shrink: 0;
+    margin-right: calc((100% - 5 * 19.3%) / 4);
+    margin-bottom: 8px;
+  }
+
+  // Убираем правый отступ у каждого 5-го элемента (последний в ряду)
+  > *:nth-child(5n) {
+    margin-right: 0;
+  }
+
+}
+
+@media (max-width: 1400px) {
+  .skinsGrid {
+    > * {
+      width: 19.2%;
+      margin-right: calc((100% - 5 * 19.2%) / 4);
+      margin-bottom: 8px;
+    }
+
+    > *:nth-child(5n) {
+      margin-right: 0;
+    }
   }
 }
+
+@media (max-width: 980px) {
+  .skinsGrid {
+    > * {
+      width: 24%;
+      margin-right: calc((100% - 4 * 24%) / 3);
+      margin-bottom: 8px;
+    }
+
+    // Сбрасываем правило для 5n, так как теперь 4 элемента в ряду
+    > *:nth-child(5n) {
+      margin-right: calc((100% - 4 * 24%) / 3);
+    }
+
+    // Убираем правый отступ у каждого 4-го элемента (последний в ряду на мобильном)
+    > *:nth-child(4n) {
+      margin-right: 0;
+    }
+  }
+}
+
 
 .skinCardWrapper {
   cursor: pointer;
@@ -44,9 +93,7 @@
     transform: translateY(-2px);
   }
 
-  &.selected {
-    // Стили для выбранной карточки
-  }
+
 }
 
 .checkIcon {
