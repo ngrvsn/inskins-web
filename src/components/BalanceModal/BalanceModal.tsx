@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form'
 import { Overlay } from '../ui/Overlay/Overlay'
 import { PaymentCard, PAYMENT_METHODS } from '../ui/PaymentCard/PaymentCard'
 import { Button } from '../ui/Button/Button'
+import { InfoBanner } from '../ui/InfoBanner/InfoBanner'
 import styles from './BalanceModal.module.scss'
 import infoIcon from '@/assets/icons/white-small-info.svg'
 import greenInfoIcon from '@/assets/icons/green-small-info.svg'
-import warnIcon from '@/assets/icons/small-green-warn.svg'
 import dropdownIcon from '@/assets/icons/icon-dropdown.svg'
 import cancelIcon from '@/assets/icons/cancel-cross.svg'
 
@@ -213,14 +213,15 @@ export const BalanceModal = ({ isOpen, onClose, type }: IBalanceModalProps) => {
           )}
 
           {isDeposit && (
-            <div className={styles.warning}>
-              <Image src={warnIcon} alt='warning' width={20} height={20} />
-              <span>
-                Обратите внимание, что средства полученные с депозитов можно
-                только потратить на покупку скинов. Вывести или перевести на
-                другой аккаунт - невозможно.
-              </span>
-            </div>
+            <InfoBanner
+              variant='warning'
+              grayBackground
+              className={styles.warningBanner}
+            >
+              Обратите внимание, что средства полученные с депозитов можно
+              только потратить на покупку скинов. Вывести или перевести на
+              другой аккаунт - невозможно.
+            </InfoBanner>
           )}
 
           <Button

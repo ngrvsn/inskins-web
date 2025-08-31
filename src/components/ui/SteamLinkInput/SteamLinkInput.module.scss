@@ -3,19 +3,19 @@
   flex-direction: column;
   gap: 6px;
   border-radius: 16px;
-background:  var(--inskins-bg-panel);
-padding: 9px;
+  background: var(--inskins-bg-panel);
+  padding: 9px;
 }
 
 .label {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
 }
 
 .highlight {
-  color: #49AA19;
+  color: #49aa19;
 }
 
 .inputWrapper {
@@ -27,9 +27,9 @@ padding: 9px;
   padding: 9px;
   border-radius: 16px;
   border-radius: 14px;
-background: #131419;
+  background: #131419;
   border: 1px solid transparent;
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -41,7 +41,7 @@ background: #131419;
 
   &:focus {
     outline: none;
-    border-color: #49AA19;
+    border-color: #49aa19;
   }
 
   &.error {
@@ -55,4 +55,21 @@ background: #131419;
   font-weight: 400;
   line-height: 18px;
   margin-top: 4px;
+}
+
+.loadingIndicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #49aa19;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  pointer-events: none;
+}
+
+.input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

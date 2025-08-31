@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Breadcrumbs,
   PageTitle,
@@ -15,33 +15,57 @@ import InfoSection from '@/components/Sell/InfoSection/InfoSection'
 import { ISkinItem } from '@/types/skin'
 import { useAuth } from '@/hooks/useAuth'
 import { type PaymentMethodId } from '@/components/ui/PaymentCard/PaymentCard'
-import { EPaymentMethod } from '@/api/users/types'
+import {
+  EPaymentMethod,
+  type IUserInventoryWithPricesResponseDto
+} from '@/api/users/types'
 import styles from './page.module.scss'
 
 export default function SellPage() {
   const { isAuthenticated, isLoading, error } = useAuth()
   const [steamLink, setSteamLink] = useState<string>('')
+  const [selectedGameId, setSelectedGameId] = useState<number>(730) // По умолчанию CS2
+  const [inventoryData, setInventoryData] =
+    useState<IUserInventoryWithPricesResponseDto | null>(null)
+  const [inventoryError, setInventoryError] = useState<string | null>(null)
   const [selectedSkins, setSelectedSkins] = useState<ISkinItem[]>([])
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethodId>(EPaymentMethod.SBP)
 
   const breadcrumbItems = [{ label: 'Продать скины' }]
 
-  const handleLinkChange = (link: string) => {
-    setSteamLink(link)
-  }
+  const handleLinkChange = useCallback(
+    (
+      link: string,
+      inventory?: IUserInventoryWithPricesResponseDto,
+      error?: string
+    ) => {
+      setSteamLink(link)
+      setInventoryData(inventory || null)
+      setInventoryError(error || null)
+    },
+    []
+  )
 
-  const handleSelectionChange = (skins: ISkinItem[]) => {
+  const handleGameChange = useCallback((gameId: number) => {
+    setSelectedGameId(gameId)
+    // Сбрасываем данные инвентаря и ошибки при смене игры
+    setInventoryData(null)
+    setInventoryError(null)
+    setSelectedSkins([])
+  }, [])
+
+  const handleSelectionChange = useCallback((skins: ISkinItem[]) => {
     setSelectedSkins(skins)
-  }
+  }, [])
 
-  const handlePaymentMethodChange = (method: PaymentMethodId) => {
+  const handlePaymentMethodChange = useCallback((method: PaymentMethodId) => {
     setSelectedPaymentMethod(method)
-  }
+  }, [])
 
-  const handleProceed = () => {
+  const handleProceed = useCallback(() => {
     // Здесь будет логика перехода к следующему шагу
-  }
+  }, [])
 
   // Показываем индикатор загрузки при проверке авторизации
   if (isLoading) {
@@ -73,13 +97,21 @@ export default function SellPage() {
               !isAuthenticated || isLoading ? styles.disabled : ''
             }`}
           >
-            <SteamLinkInput onLinkChange={handleLinkChange} withTitle />
+            <SteamLinkInput
+              onLinkChange={handleLinkChange}
+              withTitle
+              gameId={selectedGameId}
+            />
           </div>
           <SkinsGrid
             onSelectionChange={handleSelectionChange}
             steamLink={steamLink}
+            inventoryData={inventoryData}
+            selectedGameId={selectedGameId}
+            onGameChange={handleGameChange}
             isAuthenticated={isAuthenticated}
             isLoading={isLoading}
+            inventoryError={inventoryError}
           />
         </div>
 

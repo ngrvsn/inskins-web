@@ -18,6 +18,20 @@
 └── InfoSection (новый компонент)
 ```
 
+### API архитектура
+
+```
+src/api/users/
+├── index.ts (экспорт всех методов)
+├── model.ts (API методы)
+├── types.ts (типизация)
+└── inventory/
+    ├── by-trade-url (без цен)
+    ├── by-trade-url/with-prices (с ценами)
+    ├── {steamId}/inventory (без цен)
+    └── {steamId}/inventory/with-prices (с ценами)
+```
+
 ### Макет страницы
 
 - Основной контейнер с максимальной шириной 1600px
@@ -28,7 +42,7 @@
 
 ### 1. SteamLinkInput
 
-**Назначение:** Компонент для ввода и валидации ссылки на обмен Steam
+**Назначение:** Компонент для ввода и валидации ссылки на обмен Steam с интеграцией API
 
 **Интерфейс:**
 
@@ -36,6 +50,7 @@
 interface ISteamLinkInputProps {
   onLinkChange: (link: string) => void
   initialValue?: string
+  withTitle?: boolean
 }
 ```
 
@@ -44,6 +59,8 @@ interface ISteamLinkInputProps {
 - Использует react-hook-form для валидации
 - Автоматически добавляет https:// если отсутствует
 - Валидирует формат ссылки Steam Community
+- Использует useDebounce хук с задержкой 500мс для API запросов
+- Интегрируется с API для получения инвентаря по trade URL
 - Текст "Вставьте свою ссылку на обмен:" - цвет #FFF, размер 14px, вес 400, высота строки 22px
 - Слово "ссылку" выделено зеленым цветом #49AA19
 - Инпут: padding 9px, gap 6px, border-radius 16px, background rgba(19, 20, 25, 0.60)
@@ -209,6 +226,85 @@ interface IInfoSectionProps {
 ```
 
 ## Модели данных
+
+### API Models
+
+```typescript
+// Запрос инвентаря по trade URL
+interface IInventoryByTradeUrlRequest {
+  tradeUrl: string
+}
+
+// Запрос инвентаря по Steam ID
+interface IInventoryBySteamIdRequest {
+  steamId: string
+  gameId: number // 730 - CS2, 570 - Dota 2, 753 - Steam, 252490 - Rust
+}
+
+// Ответ с инвентарем без цен
+interface IUserInventoryResponseDto {
+  steamId: string
+  tradeUrl?: string
+  gameId: number
+  contextId: number
+  items: IUserInventoryItemDto[]
+  count: number
+  lastUpdated: string
+}
+
+// Ответ с инвентарем с ценами
+interface IUserInventoryWithPricesResponseDto
+  extends IUserInventoryResponseDto {
+  totalValue: number
+  priceStats?: IPriceStats
+}
+
+// Предмет инвентаря
+interface IUserInventoryItemDto {
+  assetId: string
+  classId: string
+  instanceId: string
+  market_name: string
+  market_hash_name: string
+  name: string
+  type: string
+  rarity: string
+  exterior?: string
+  image: string
+  tradable: boolean
+  marketable: boolean
+  amount: number
+}
+
+// Предмет инвентаря с ценами
+interface IUserInventoryItemWithPricesDto extends IUserInventoryItemDto {
+  prices?: IPriceInfo
+}
+
+// Информация о ценах
+interface IPriceInfo {
+  steam?: number
+  buff?: number
+  market?: number
+  suggested?: number
+}
+
+// Статистика цен
+interface IPriceStats {
+  minPrice: number
+  maxPrice: number
+  avgPrice: number
+  totalItems: number
+}
+
+// Game IDs константы
+enum EGameId {
+  CS2 = 730,
+  DOTA2 = 570,
+  STEAM = 753,
+  RUST = 252490
+}
+```
 
 ### Skin Model
 
@@ -388,3 +484,26 @@ interface IBankOption {
 - Disabled: background #1E1F21, opacity 0.7, color #FFF
 - Hover эффекты: transition 0.2s
 - Размеры: small (32px), medium (40px), large (50px) по высоте
+
+## Утилиты для работы с датами
+
+### Расчет сроков выплаты
+
+```typescript
+import dayjs from 'dayjs'
+
+// Функция для расчета даты выплаты (текущая дата + 8 дней)
+const calculatePayoutDate = (): string => {
+  return dayjs().add(8, 'day').format('DD.MM.YYYY HH:mm')
+}
+
+// Использование в компонентах
+const payoutDate = calculatePayoutDate()
+const protectionText = `выплата за скины будет произведена через 8 дней (после ${payoutDate})`
+```
+
+### Интеграция в компоненты
+
+- PaymentSidebar: использует calculatePayoutDate() для отображения актуальной даты
+- PaymentForm: также использует calculatePayoutDate() для информации о выплате
+- InfoBanner: может использовать для других временных уведомлений

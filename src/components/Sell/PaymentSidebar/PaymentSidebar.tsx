@@ -8,14 +8,15 @@ import {
   type PaymentMethodId
 } from '../../ui/PaymentCard/PaymentCard'
 import { Button } from '../../ui/Button/Button'
+import { InfoBanner } from '../../ui/InfoBanner/InfoBanner'
 import { ISkinItem } from '@/types/skin'
 import { getDeclination } from '@/utils/getDeclination'
 import { EPaymentMethod } from '@/api/users/types'
+import { getPayoutProtectionText } from '@/utils/calculatePayoutDate'
 import Link from 'next/link'
 import { PaymentForm } from './PaymentForm'
 import styles from './PaymentSidebar.module.scss'
 import dropdownIcon from '@/assets/icons/white-dropdown.svg'
-import greenWarnIcon from '@/assets/icons/small-green-warn.svg'
 import whiteInfoIcon from '@/assets/icons/white-small-info.svg'
 
 interface IPaymentFormData {
@@ -164,25 +165,17 @@ export const PaymentSidebar = ({
         {mode === 'selection' ? (
           <>
             {/* Информация о Steam Trade Protection */}
-            <div className={styles.protectionInfo}>
-              <Image
-                src={greenWarnIcon}
-                alt='info'
-                width={24}
-                height={24}
-                className={styles.protectionIcon}
-              />
-              <div className={styles.protectionTextContainer}>
-                <p className={styles.protectionText}>
-                  Из-за новых правил{' '}
-                  <Link href='#' className={styles.protectionLink}>
-                    Steam Trade Protection
-                  </Link>
-                  , выплата за скины будет произведена через 8 дней (после
-                  5.08.2025 14:00)
-                </p>
-              </div>
-            </div>
+            <InfoBanner
+              variant='warning'
+              grayBackground
+              className={styles.protectionBanner}
+            >
+              Из-за новых правил{' '}
+              <Link href='#' className={styles.protectionLink}>
+                Steam Trade Protection
+              </Link>
+              , {getPayoutProtectionText()}
+            </InfoBanner>
 
             {/* Способы оплаты */}
             <div className={styles.paymentSection}>

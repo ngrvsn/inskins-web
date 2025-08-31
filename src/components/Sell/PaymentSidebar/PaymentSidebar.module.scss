@@ -198,35 +198,12 @@
   margin-bottom: 20px;
 }
 
-.protectionInfo {
-  display: flex;
-  align-items: flex-start;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+.protectionBanner {
   margin-bottom: 14px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(37, 39, 45, 0.6);
-}
-
-.protectionTextContainer {
-  flex: 1;
-}
-
-.protectionText {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-  margin-bottom: 4px;
 }
 
 .protectionLink {
   color: #49aa19;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
   text-decoration: underline;
   cursor: pointer;
 }

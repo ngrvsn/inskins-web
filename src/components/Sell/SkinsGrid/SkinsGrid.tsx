@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import {
   SkinCard,
@@ -13,6 +13,10 @@ import {
 } from '@/components/ui'
 import { ISkinItem } from '@/types/skin'
 import { AuthPrompt } from '../AuthPrompt/AuthPrompt'
+import type {
+  IUserInventoryWithPricesResponseDto,
+  IUserInventoryItemWithPricesDto
+} from '@/api/users/types'
 import styles from './SkinsGrid.module.scss'
 import mockCard from '@/assets/images/mockCard.png'
 import greenCheckIcon from '@/assets/icons/green-check.svg'
@@ -20,8 +24,12 @@ import greenCheckIcon from '@/assets/icons/green-check.svg'
 interface ISkinsGridProps {
   onSelectionChange: (selectedSkins: ISkinItem[]) => void
   steamLink?: string
+  inventoryData?: IUserInventoryWithPricesResponseDto | null
+  selectedGameId?: number
+  onGameChange?: (gameId: number) => void
   isAuthenticated?: boolean
   isLoading?: boolean
+  inventoryError?: string | null
 }
 
 interface IFilterState {
@@ -31,7 +39,7 @@ interface IFilterState {
   selectedSkins: string[]
 }
 
-// Мок данные для демонстрации
+// Мок данные для демонстрации (показываются только если нет Steam ссылки)
 const mockSkins: ISkinItem[] = [
   {
     id: '1',
@@ -105,32 +113,105 @@ const mockSkins: ISkinItem[] = [
 ]
 
 const gameOptions = [
-  { value: '', label: 'Все игры' },
-  { value: 'csgo', label: 'CS:GO' },
-  { value: 'rust', label: 'Rust' },
-  { value: 'dota2', label: 'Dota 2' }
+  { value: '730', label: 'CS2' },
+  { value: '252490', label: 'Rust' },
+  { value: '570', label: 'Dota 2' }
 ]
+
+// Функция для маппинга данных API в ISkinItem
+const mapInventoryItemToSkinItem = (
+  item: IUserInventoryItemWithPricesDto,
+  gameId: number
+): ISkinItem => {
+  // Определяем игру по gameId
+  let game: 'csgo' | 'rust' | 'dota2' = 'csgo'
+  if (gameId === 252490) game = 'rust'
+  else if (gameId === 570) game = 'dota2'
+
+  // Получаем цену из различных источников с приоритетом
+  const price =
+    item.prices?.suggested ||
+    item.prices?.market ||
+    item.prices?.steam ||
+    item.prices?.buff ||
+    0
+
+  return {
+    id: item.assetId,
+    title: item.market_name || item.name,
+    price: Math.round(price), // Округляем цену до целого числа
+    image: item.image || mockCard,
+    badge: item.exterior,
+    status: item.tradable && item.marketable ? 'available' : 'unavailable',
+    game
+  }
+}
 
 export const SkinsGrid = ({
   onSelectionChange,
   steamLink,
+  inventoryData,
+  selectedGameId = 730,
+  onGameChange,
   isAuthenticated = true,
-  isLoading = false
+  isLoading = false,
+  inventoryError = null
 }: ISkinsGridProps) => {
   const [filters, setFilters] = useState<IFilterState>({
-    game: '',
+    game: selectedGameId.toString(),
     search: '',
     sort: 'desc',
     selectedSkins: []
   })
 
+  // Синхронизируем локальное состояние с пропсом selectedGameId
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, game: selectedGameId.toString() }))
+  }, [selectedGameId])
+
+  // Сбрасываем выбранные скины при смене данных инвентаря или игры
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, selectedSkins: [] }))
+    onSelectionChange([])
+  }, [inventoryData, selectedGameId]) // Убираем onSelectionChange из зависимостей
+
+  // Получаем скины из API данных или используем мок данные
+  const allSkins = useMemo(() => {
+    // Если есть Steam ссылка, но нет данных инвентаря - не показываем мок данные
+    if (steamLink && !inventoryData) {
+      return []
+    }
+
+    // Если есть данные инвентаря, маппим их в ISkinItem
+    if (inventoryData && inventoryData.items.length > 0) {
+      return inventoryData.items
+        .map((item) => mapInventoryItemToSkinItem(item, inventoryData.gameId))
+        .filter((skin) => skin.price > 0) // Показываем только скины с ценой
+    }
+
+    // Если нет Steam ссылки, показываем мок данные для демонстрации
+    if (!steamLink) {
+      return mockSkins
+    }
+
+    return []
+  }, [inventoryData, steamLink])
+
   // Фильтрация и сортировка скинов
   const filteredSkins = useMemo(() => {
-    let result = mockSkins.filter((skin) => {
-      const matchesGame = !filters.game || skin.game === filters.game
+    let result = allSkins.filter((skin) => {
+      // Если есть данные инвентаря, показываем только скины из этого инвентаря
+      // Иначе фильтруем по выбранной игре (для мок данных)
+      const matchesGame = inventoryData
+        ? true
+        : (selectedGameId === 730 && skin.game === 'csgo') ||
+          (selectedGameId === 252490 && skin.game === 'rust') ||
+          (selectedGameId === 570 && skin.game === 'dota2')
+
       const matchesSearch =
         !filters.search ||
         skin.title.toLowerCase().includes(filters.search.toLowerCase())
+
       return matchesGame && matchesSearch
     })
 
@@ -140,37 +221,49 @@ export const SkinsGrid = ({
     })
 
     return result
-  }, [filters.game, filters.search, filters.sort])
+  }, [allSkins, selectedGameId, inventoryData, filters.search, filters.sort])
 
   // Обработчики фильтров
-  const handleGameChange = (game: string) => {
-    setFilters((prev) => ({ ...prev, game }))
-  }
+  const handleGameChange = useCallback(
+    (game: string) => {
+      setFilters((prev) => ({ ...prev, game }))
+      // Передаем изменение игры в родительский компонент
+      if (onGameChange) {
+        onGameChange(parseInt(game))
+      }
+    },
+    [onGameChange]
+  )
 
-  const handleSearchChange = (search: string) => {
+  const handleSearchChange = useCallback((search: string) => {
     setFilters((prev) => ({ ...prev, search }))
-  }
+  }, [])
 
-  const handleSortChange = (sort: 'asc' | 'desc') => {
+  const handleSortChange = useCallback((sort: 'asc' | 'desc') => {
     setFilters((prev) => ({ ...prev, sort }))
-  }
+  }, [])
 
   // Обработчики выбора скинов
-  const handleSkinSelect = (skinId: string) => {
-    const newSelectedSkins = filters.selectedSkins.includes(skinId)
-      ? filters.selectedSkins.filter((id) => id !== skinId)
-      : [...filters.selectedSkins, skinId]
+  const handleSkinSelect = useCallback(
+    (skinId: string) => {
+      setFilters((prev) => {
+        const newSelectedSkins = prev.selectedSkins.includes(skinId)
+          ? prev.selectedSkins.filter((id) => id !== skinId)
+          : [...prev.selectedSkins, skinId]
 
-    setFilters((prev) => ({ ...prev, selectedSkins: newSelectedSkins }))
+        // Передаем выбранные скины родительскому компоненту
+        const selectedSkinsData = allSkins.filter((skin) =>
+          newSelectedSkins.includes(skin.id)
+        )
+        onSelectionChange(selectedSkinsData)
 
-    // Передаем выбранные скины родительскому компоненту
-    const selectedSkinsData = mockSkins.filter((skin) =>
-      newSelectedSkins.includes(skin.id)
-    )
-    onSelectionChange(selectedSkinsData)
-  }
+        return { ...prev, selectedSkins: newSelectedSkins }
+      })
+    },
+    [allSkins, onSelectionChange]
+  )
 
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     const allFilteredIds = filteredSkins.map((skin) => skin.id)
     const isAllSelected = allFilteredIds.every((id) =>
       filters.selectedSkins.includes(id)
@@ -182,15 +275,18 @@ export const SkinsGrid = ({
 
     setFilters((prev) => ({ ...prev, selectedSkins: newSelectedSkins }))
 
-    const selectedSkinsData = mockSkins.filter((skin) =>
+    const selectedSkinsData = allSkins.filter((skin) =>
       newSelectedSkins.includes(skin.id)
     )
     onSelectionChange(selectedSkinsData)
-  }
+  }, [filteredSkins, filters.selectedSkins, allSkins, onSelectionChange])
 
-  const handleRefresh = () => {
-    // Логика обновления данных
-  }
+  const handleRefresh = useCallback(() => {
+    // Сбрасываем выбранные скины при обновлении
+    setFilters((prev) => ({ ...prev, selectedSkins: [] }))
+    onSelectionChange([])
+    // Логика обновления данных будет реализована в родительском компоненте
+  }, [onSelectionChange])
 
   const isAllSelected =
     filteredSkins.length > 0 &&
@@ -205,7 +301,7 @@ export const SkinsGrid = ({
         }`}
       >
         <GameSelector
-          value={filters.game}
+          value={selectedGameId.toString()}
           onChange={handleGameChange}
           options={gameOptions}
         />
@@ -227,7 +323,7 @@ export const SkinsGrid = ({
         <RefreshButton onClick={handleRefresh} />
       </div>
 
-      {/* Сетка скинов или сообщение об авторизации */}
+      {/* Сетка скинов или различные состояния */}
       <div className={styles.skinsGrid}>
         {!isAuthenticated ? (
           <div className={styles.authPrompt}>
@@ -236,8 +332,28 @@ export const SkinsGrid = ({
         ) : isLoading ? (
           <div className={styles.loadingContainer}>
             <Spinner size='large' color='green' />
-            <p className={styles.loadingText}>
-              Загрузка данных пользователя...
+            <p className={styles.loadingText}>Загрузка инвентаря...</p>
+          </div>
+        ) : inventoryError ? (
+          <div className={styles.errorContainer}>
+            <p className={styles.errorText}>{inventoryError}</p>
+          </div>
+        ) : steamLink && inventoryData && inventoryData.items.length === 0 ? (
+          <div className={styles.emptyInventory}>
+            <p className={styles.emptyText}>
+              Инвентарь пуст или не содержит предметов для продажи
+            </p>
+          </div>
+        ) : steamLink && !inventoryData && !isLoading ? (
+          <div className={styles.noInventoryData}>
+            <p className={styles.noInventoryText}>
+              Введите корректную ссылку на обмен Steam для загрузки инвентаря
+            </p>
+          </div>
+        ) : filteredSkins.length === 0 && (steamLink || allSkins.length > 0) ? (
+          <div className={styles.noResults}>
+            <p className={styles.noResultsText}>
+              Не найдено предметов по заданным фильтрам
             </p>
           </div>
         ) : (
@@ -246,8 +362,10 @@ export const SkinsGrid = ({
               key={skin.id}
               className={`${styles.skinCardWrapper} ${
                 filters.selectedSkins.includes(skin.id) ? styles.selected : ''
-              }`}
-              onClick={() => handleSkinSelect(skin.id)}
+              } ${skin.status === 'unavailable' ? styles.unavailable : ''}`}
+              onClick={() =>
+                skin.status === 'available' && handleSkinSelect(skin.id)
+              }
             >
               <SkinCard
                 title={skin.title}

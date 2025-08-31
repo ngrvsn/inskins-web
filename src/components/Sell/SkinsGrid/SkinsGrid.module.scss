@@ -26,12 +26,15 @@
   background: rgba(19, 20, 25, 0.6);
   width: 100%;
 
-  // Центрирование для AuthPrompt и загрузки
+  // Центрирование для AuthPrompt, загрузки и пустых состояний
   &:has(.authPrompt),
-  &:has(.loadingContainer) {
+  &:has(.loadingContainer),
+  &:has(.emptyInventory),
+  &:has(.noResults),
+  &:has(.errorContainer),
+  &:has(.noInventoryData) {
     justify-content: center;
     align-items: center;
-
   }
 
   > * {
@@ -45,7 +48,6 @@
   > *:nth-child(5n) {
     margin-right: 0;
   }
-
 }
 
 @media (max-width: 1400px) {
@@ -82,7 +84,6 @@
   }
 }
 
-
 .skinCardWrapper {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -92,8 +93,6 @@
   &:hover {
     transform: translateY(-2px);
   }
-
-
 }
 
 .checkIcon {
@@ -127,4 +126,46 @@
   font-size: 16px;
   font-weight: 500;
   margin: 0;
+}
+
+.emptyInventory,
+.noResults,
+.errorContainer,
+.noInventoryData {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.emptyText,
+.noResultsText,
+.noInventoryText {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.errorText {
+  color: #ff6b6b;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+}
+
+.skinCardWrapper {
+  &.unavailable {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+    }
+  }
 }

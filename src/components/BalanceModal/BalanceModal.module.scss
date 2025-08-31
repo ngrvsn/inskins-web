@@ -16,7 +16,7 @@
 }
 
 .title {
-  color: #FFF;
+  color: #fff;
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
@@ -26,7 +26,7 @@
 .closeButton {
   background: none;
   border: none;
-  color: #FFF;
+  color: #fff;
   font-size: 24px;
   cursor: pointer;
   padding: 0;
@@ -50,7 +50,7 @@
 }
 
 .label {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -61,7 +61,7 @@
 .amountInput {
   background: #1a1d23;
   border-radius: 14px;
-  border: 1px solid #2B2B2B;
+  border: 1px solid #2b2b2b;
   display: flex;
   align-items: center;
   padding: 16px 20px;
@@ -69,16 +69,16 @@
   transition: border-color 0.2s ease;
 
   &:focus-within {
-    border-color: #49AA19;
+    border-color: #49aa19;
   }
 
   &.error {
-    border-color: #DC4446;
+    border-color: #dc4446;
   }
 }
 
 .currency {
-  color: #FFF;
+  color: #fff;
   font-size: 18px;
   font-weight: 600;
   flex-shrink: 0;
@@ -87,7 +87,7 @@
 .input {
   background: none;
   border: none;
-  color: #FFF;
+  color: #fff;
   font-size: 18px;
   font-weight: 600;
   flex: 1;
@@ -108,12 +108,12 @@
 .currencyIcon {
   width: 32px;
   height: 32px;
-  background: #49AA19;
+  background: #49aa19;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
 }
@@ -125,7 +125,7 @@
 }
 
 .currencyName {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
@@ -139,7 +139,7 @@
 }
 
 .minAmount {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -147,7 +147,7 @@
 }
 
 .errorMessage {
-  color: #DC4446;
+  color: #dc4446;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -161,7 +161,7 @@
 .withdrawCurrencySelector {
   background: #1a1d23;
   border-radius: 14px;
-  border: 1px solid #2B2B2B;
+  border: 1px solid #2b2b2b;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,7 +178,7 @@
 }
 
 .balanceItem {
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -192,7 +192,6 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-bottom: 24px;
-
 }
 
 .paymentDataSection {
@@ -202,9 +201,9 @@
 .paymentInput {
   background: #1a1d23;
   border-radius: 14px;
-  border: 1px solid #2B2B2B;
+  border: 1px solid #2b2b2b;
   padding: 16px 20px;
-  color: #FFF;
+  color: #fff;
   font-size: 14px;
   width: 100%;
   outline: none;
@@ -215,36 +214,23 @@
   }
 
   &:focus {
-    border-color: #49AA19;
+    border-color: #49aa19;
   }
 
   &.error {
-    border-color: #DC4446;
+    border-color: #dc4446;
   }
 }
 
-.warning {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-radius: 10px;
-background: rgba(37, 39, 45, 0.60);
-  padding: 14px 12px;
+.warningBanner {
   margin-bottom: 24px;
-
-  span {
-    color: #FFF;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
-  }
 }
 
 .submitButton {
-  background: #49AA19;
+  background: #49aa19;
   border: none;
   border-radius: 14px;
-  color: #FFF;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
@@ -277,13 +263,13 @@ background: rgba(37, 39, 45, 0.60);
 }
 
 .telegramLink {
-  color: #49AA19;
+  color: #49aa19;
   text-decoration-line: underline;
-text-decoration-style: solid;
-text-decoration-skip-ink: none;
-text-decoration-thickness: auto;
-text-underline-offset: auto;
-text-underline-position: from-font;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
 
   &:hover {
     text-decoration: underline;

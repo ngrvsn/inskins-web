@@ -3,6 +3,14 @@
 // Для базовой авторизации используйте типы из src/api/auth/types.ts
 
 // Enum для игр
+export enum EGameId {
+  CS2 = 730,
+  DOTA2 = 570,
+  STEAM = 753,
+  RUST = 252490
+}
+
+// Старый enum для обратной совместимости (deprecated)
 export enum GameId {
   CS2 = 730,
   DOTA2 = 570,
@@ -79,7 +87,69 @@ export interface IInventoryWithPricesResponse {
 // Запрос инвентаря по trade URL
 export interface IInventoryByTradeUrlRequest {
   tradeUrl: string
+  gameId?: number // Опциональный, по умолчанию CS2
+}
+
+// Запрос инвентаря по Steam ID
+export interface IInventoryBySteamIdRequest {
+  steamId: string
   gameId: number
+}
+
+// Базовый предмет инвентаря согласно дизайну
+export interface IUserInventoryItemDto {
+  assetId: string
+  classId: string
+  instanceId: string
+  market_name: string
+  market_hash_name: string
+  name: string
+  type: string
+  rarity: string
+  exterior?: string
+  image: string
+  tradable: boolean
+  marketable: boolean
+  amount: number
+}
+
+// Предмет инвентаря с ценами согласно дизайну
+export interface IUserInventoryItemWithPricesDto extends IUserInventoryItemDto {
+  prices?: IPriceInfo
+}
+
+// Информация о ценах
+export interface IPriceInfo {
+  steam?: number
+  buff?: number
+  market?: number
+  suggested?: number
+}
+
+// Статистика цен
+export interface IPriceStats {
+  minPrice: number
+  maxPrice: number
+  avgPrice: number
+  totalItems: number
+}
+
+// Ответ с инвентарем без цен согласно дизайну
+export interface IUserInventoryResponseDto {
+  steamId: string
+  tradeUrl?: string
+  gameId: number
+  contextId: number
+  items: IUserInventoryItemDto[]
+  count: number
+  lastUpdated: string
+}
+
+// Ответ с инвентарем с ценами согласно дизайну
+export interface IUserInventoryWithPricesResponseDto extends IUserInventoryResponseDto {
+  items: IUserInventoryItemWithPricesDto[]
+  totalValue: number
+  priceStats?: IPriceStats
 }
 
 // Типы транзакций

@@ -27,7 +27,7 @@ export const UserInfo = ({
         <Image src={shareIcon} alt='Share URL' width={22} height={22} />
         <SteamLinkInput
           initialValue={steamTradeUrl}
-          onLinkChange={onSteamLinkChange}
+          onLinkChange={(link) => onSteamLinkChange(link)}
         />
       </div>
     </div>

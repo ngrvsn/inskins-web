@@ -3,18 +3,24 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Button, Input, CountryBankSelector, FraudWarningModal } from '../../ui'
+import {
+  Button,
+  Input,
+  CountryBankSelector,
+  FraudWarningModal,
+  InfoBanner
+} from '../../ui'
 import {
   PaymentCard,
   type PaymentMethodId
 } from '../../ui/PaymentCard/PaymentCard'
+import { getPayoutProtectionText } from '@/utils/calculatePayoutDate'
 import Link from 'next/link'
 import { type ITransaction } from '@/types/transaction'
 import styles from './PaymentForm.module.scss'
 import backIcon from '@/assets/icons/white-arrow-left.svg'
 import checkSoloGreen from '@/assets/icons/check-solo-green.svg'
 import whiteInfoIcon from '@/assets/icons/white-small-info.svg'
-import greenWarnIcon from '@/assets/icons/small-green-warn.svg'
 
 interface IPaymentFormData {
   country: string
@@ -158,25 +164,17 @@ export const PaymentForm = ({
       </button>
 
       {/* Информация о Steam Trade Protection */}
-      <div className={styles.protectionInfo}>
-        <Image
-          src={greenWarnIcon}
-          alt='info'
-          width={24}
-          height={24}
-          className={styles.protectionIcon}
-        />
-        <div className={styles.protectionTextContainer}>
-          <p className={styles.protectionText}>
-            Из-за новых правил{' '}
-            <Link href='#' className={styles.protectionLink}>
-              Steam Trade Protection
-            </Link>
-            , выплата за скины будет произведена через 8 дней (после 5.08.2025
-            14:00)
-          </p>
-        </div>
-      </div>
+      <InfoBanner
+        variant='warning'
+        grayBackground
+        className={styles.protectionBanner}
+      >
+        Из-за новых правил{' '}
+        <Link href='#' className={styles.protectionLink}>
+          Steam Trade Protection
+        </Link>
+        , {getPayoutProtectionText()}
+      </InfoBanner>
 
       {/* Выбранный способ оплаты */}
       <div className={styles.selectedMethod}>

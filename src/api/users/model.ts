@@ -5,10 +5,10 @@ import { privateApi } from '../config'
 import type {
   IInventoryResponse,
   IInventoryWithPricesResponse,
-  IInventoryByTradeUrlRequest,
+  IUserInventoryResponseDto,
+  IUserInventoryWithPricesResponseDto,
   ITransactionFilters,
-  ITransactionsResponse,
-  IUserMeResponse
+  ITransactionsResponse
 } from './types'
 
 // Построение query параметров для фильтрации транзакций
@@ -32,7 +32,7 @@ export const buildTransactionFilters = (filters?: ITransactionFilters): URLSearc
   return params
 }
 
-// Получить инвентарь пользователя без цен по Steam ID
+// Получить инвентарь пользователя без цен по Steam ID (старый метод для обратной совместимости)
 export const getInventory = async (
   steamId: string,
   gameId: number
@@ -45,13 +45,17 @@ export const getInventory = async (
 
 // Получить инвентарь по trade URL без цен
 export const getInventoryByTradeUrl = async (
-  data: IInventoryByTradeUrlRequest
-): Promise<IInventoryResponse> => {
-  const response = await privateApi.post('/api/users/inventory/by-trade-url', data)
+  tradeUrl: string,
+  gameId: number = 730
+): Promise<IUserInventoryResponseDto> => {
+  const response = await privateApi.post('/api/users/inventory/by-trade-url', {
+    tradeUrl,
+    gameId
+  })
   return response.data
 }
 
-// Получить инвентарь с ценами по Steam ID
+// Получить инвентарь с ценами по Steam ID (старый метод для обратной совместимости)
 export const getInventoryWithPrices = async (
   steamId: string,
   gameId: number
@@ -64,9 +68,37 @@ export const getInventoryWithPrices = async (
 
 // Получить инвентарь по trade URL с ценами
 export const getInventoryByTradeUrlWithPrices = async (
-  data: IInventoryByTradeUrlRequest
-): Promise<IInventoryWithPricesResponse> => {
-  const response = await privateApi.post('/api/users/inventory/by-trade-url/with-prices', data)
+  tradeUrl: string,
+  gameId: number = 730
+): Promise<IUserInventoryWithPricesResponseDto> => {
+  const response = await privateApi.post('/api/users/inventory/by-trade-url/with-prices', {
+    tradeUrl,
+    gameId
+  })
+  return response.data
+}
+
+// НОВЫЕ МЕТОДЫ СОГЛАСНО ДИЗАЙНУ
+
+// Получить инвентарь по Steam ID без цен
+export const getInventoryBySteamId = async (
+  steamId: string,
+  gameId: number
+): Promise<IUserInventoryResponseDto> => {
+  const response = await privateApi.get(`/api/users/${steamId}/inventory`, {
+    params: { gameId }
+  })
+  return response.data
+}
+
+// Получить инвентарь по Steam ID с ценами
+export const getInventoryBySteamIdWithPrices = async (
+  steamId: string,
+  gameId: number
+): Promise<IUserInventoryWithPricesResponseDto> => {
+  const response = await privateApi.get(`/api/users/${steamId}/inventory/with-prices`, {
+    params: { gameId }
+  })
   return response.data
 }
 
