@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { SearchInput } from '@/components/ui'
 import { TransactionRow } from '../TransactionRow/TransactionRow'
-import { IUserTransaction } from '@/api/users/types'
+import { IUserTransaction, EPaymentMethod } from '@/api/users/types'
 import styles from './TransactionsTab.module.scss'
 
 interface ITransactionsTabProps {
@@ -24,7 +24,7 @@ const mockTransactions: IUserTransaction[] = [
     steamId: '76561198000000001',
     type: 'order_payout',
     status: 'completed',
-    method: 'sbp',
+    method: EPaymentMethod.SBP,
     currency: 'RUB',
     amount: 1250.75,
     relatedOrderId: 'ORD001',
@@ -38,7 +38,7 @@ const mockTransactions: IUserTransaction[] = [
     steamId: '76561198000000001',
     type: 'purchase',
     status: 'completed',
-    method: 'card_ru',
+    method: EPaymentMethod.CARD,
     currency: 'RUB',
     amount: 750.0,
     createdAt: '2024-01-14T10:15:00Z',
@@ -51,7 +51,7 @@ const mockTransactions: IUserTransaction[] = [
     steamId: '76561198000000001',
     type: 'deposit',
     status: 'completed',
-    method: 'qiwi',
+    method: EPaymentMethod.INSKINS,
     currency: 'RUB',
     amount: 2000.0,
     createdAt: '2024-01-13T16:45:00Z',
@@ -64,7 +64,7 @@ const mockTransactions: IUserTransaction[] = [
     steamId: '76561198000000001',
     type: 'order_payout',
     status: 'cancelled',
-    method: 'sbp',
+    method: EPaymentMethod.SBP,
     currency: 'RUB',
     amount: 500.0,
     relatedOrderId: 'ORD002',
@@ -78,7 +78,7 @@ const mockTransactions: IUserTransaction[] = [
     steamId: '76561198000000001',
     type: 'withdrawal',
     status: 'pending',
-    method: 'card_ru',
+    method: EPaymentMethod.CARD,
     currency: 'RUB',
     amount: 1500.0,
     createdAt: '2024-01-11T13:10:00Z',
@@ -122,7 +122,6 @@ export const TransactionsTab = ({}: ITransactionsTabProps) => {
 
   return (
     <div className={styles.transactionsTab}>
-
       {/* Поля поиска */}
       <div className={styles.searchFilters}>
         <SearchInput

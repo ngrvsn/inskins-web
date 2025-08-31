@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { IUserTransaction } from '@/api/users/types'
-import {TransactionDetails} from '../TransactionDetails/TransactionDetails'
+import { IUserTransaction, EPaymentMethod } from '@/api/users/types'
+import { TransactionDetails } from '../TransactionDetails/TransactionDetails'
 import Image from 'next/image'
 import dropdownIcon from '@/assets/icons/white-dropdown-arrow.svg'
 import styles from './TransactionRow.module.scss'
@@ -75,26 +75,32 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
     return `${amount.toFixed(2)} ${currency}`
   }
 
-  const getPaymentMethodLabel = (method?: string) => {
+  const getPaymentMethodLabel = (method?: EPaymentMethod | string) => {
     if (!method) return 'Не указан'
 
     switch (method) {
-      case 'sbp':
-        return 'СБП'
-      case 'card_ru':
+      case EPaymentMethod.CARD:
         return 'Банковская карта'
-      case 'qiwi':
-        return 'Qiwi'
-      case 'yandex_money':
-        return 'ЮMoney'
-      case 'usdt_trc20':
+      case EPaymentMethod.SBP:
+        return 'СБП'
+      case EPaymentMethod.USDT_TRC20:
         return 'USDT TRC20'
-      case 'usdt_erc20':
-        return 'USDT ERC20'
-      case 'btc':
+      case EPaymentMethod.BNB:
+        return 'BNB'
+      case EPaymentMethod.USDC_TRC20:
+        return 'USDC TRC20'
+      case EPaymentMethod.BTC:
         return 'Bitcoin'
-      case 'eth':
+      case EPaymentMethod.ETH:
         return 'Ethereum'
+      case EPaymentMethod.SOLANA:
+        return 'Solana'
+      case EPaymentMethod.TON:
+        return 'TON'
+      case EPaymentMethod.USDT_ERC20:
+        return 'USDT ERC20'
+      case EPaymentMethod.INSKINS:
+        return 'INSKINS'
       default:
         return method
     }
@@ -140,9 +146,9 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
                   alt='dropdown'
                   width={12}
                   height={12}
-                   className={`${styles.expandIcon} ${
-                  isExpanded ? styles.expanded : ''
-                }`}
+                  className={`${styles.expandIcon} ${
+                    isExpanded ? styles.expanded : ''
+                  }`}
                 />
               </div>
               <div className={styles.date}>

@@ -1,4 +1,6 @@
 // Интерфейсы для API пользователей
+// ВНИМАНИЕ: Эти типы используются для получения ПОЛНЫХ данных профиля пользователя
+// Для базовой авторизации используйте типы из src/api/auth/types.ts
 
 // Enum для игр
 export enum GameId {
@@ -98,23 +100,22 @@ export type TTransactionStatus =
   | 'cancelled'
 
 // Методы оплаты
-export type TPaymentMethod =
-  | 'sbp'
-  | 'card_ru'
-  | 'card_visa'
-  | 'card_mastercard'
-  | 'sepa'
-  | 'paypal'
-  | 'usdt_trc20'
-  | 'usdt_erc20'
-  | 'usdt_bsc'
-  | 'btc'
-  | 'eth'
-  | 'ton'
-  | 'bnb'
-  | 'sol'
-  | 'qiwi'
-  | 'yandex_money'
+export enum EPaymentMethod {
+  CARD = 'card',
+  SBP = 'sbp',
+  USDT_TRC20 = 'usdt_trc20',
+  BNB = 'bnb',
+  USDC_TRC20 = 'usdc_trc20',
+  BTC = 'btc',
+  ETH = 'eth',
+  SOLANA = 'solana',
+  TON = 'ton',
+  USDT_ERC20 = 'usdt_erc20',
+  INSKINS = 'inskins'
+}
+
+// Старый тип для обратной совместимости (deprecated)
+export type TPaymentMethod = EPaymentMethod
 
 // Транзакция пользователя
 export interface IUserTransaction {
@@ -123,7 +124,7 @@ export interface IUserTransaction {
   steamId: string
   type: TTransactionType
   status: TTransactionStatus
-  method?: TPaymentMethod
+  method?: EPaymentMethod
   currency: string
   amount: number
   relatedOrderId?: string
@@ -137,7 +138,7 @@ export interface ITransactionFilters {
   userId?: string
   type?: TTransactionType
   status?: TTransactionStatus
-  method?: TPaymentMethod
+  method?: EPaymentMethod
   currency?: string
   relatedOrderId?: string
   fromDate?: string

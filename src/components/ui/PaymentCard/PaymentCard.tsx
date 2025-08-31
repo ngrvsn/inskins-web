@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { type TPaymentMethod } from '@/api/users/types'
+import { EPaymentMethod } from '@/api/users/types'
 import styles from './PaymentCard.module.scss'
 
 // Импорт всех иконок
@@ -17,9 +17,9 @@ import tonIcon from '@/assets/icons/ton-payment.svg'
 import usdtErcIcon from '@/assets/icons/usdterc-payment.svg'
 import inskinsIcon from '@/assets/icons/inskins-payment.svg'
 
-// Конфигурация платежных методов с использованием API типов
+// Конфигурация платежных методов с использованием нового enum
 const paymentMethodsConfig: Record<
-  TPaymentMethod,
+  EPaymentMethod,
   {
     icon: any
     title: string
@@ -28,121 +28,86 @@ const paymentMethodsConfig: Record<
     height: number
   }
 > = {
-  card_ru: {
+  [EPaymentMethod.CARD]: {
     icon: cardIcon,
     title: 'Карты РФ',
     showTitle: true,
     width: 28,
     height: 20
   },
-  card_visa: {
-    icon: cardIcon,
-    title: 'Visa',
-    showTitle: true,
-    width: 28,
-    height: 20
-  },
-  card_mastercard: {
-    icon: cardIcon,
-    title: 'Mastercard',
-    showTitle: true,
-    width: 28,
-    height: 20
-  },
-  sbp: {
+  [EPaymentMethod.SBP]: {
     icon: sbpIcon,
     title: 'СБП',
     showTitle: false,
     width: 75,
     height: 36
   },
-  usdt_trc20: {
+  [EPaymentMethod.USDT_TRC20]: {
     icon: usdtTrcIcon,
     title: 'USDT TRC-20',
     showTitle: false,
     width: 75,
     height: 36
   },
-  usdt_erc20: {
-    icon: usdtErcIcon,
-    title: 'USDT ERC-20',
-    showTitle: false,
-    width: 75,
-    height: 36
-  },
-  usdt_bsc: {
-    icon: usdcIcon,
-    title: 'USDT BSC',
-    showTitle: false,
-    width: 75,
-    height: 36
-  },
-  btc: {
-    icon: bitcoinIcon,
-    title: 'Bitcoin',
-    showTitle: false,
-    width: 77,
-    height: 18
-  },
-  eth: {
-    icon: ethereumIcon,
-    title: 'Ethereum',
-    showTitle: false,
-    width: 77,
-    height: 21
-  },
-  sol: {
-    icon: solanaIcon,
-    title: 'Solana',
-    showTitle: false,
-    width: 77,
-    height: 21
-  },
-  ton: {
-    icon: tonIcon,
-    title: 'TON',
-    showTitle: false,
-    width: 70,
-    height: 30
-  },
-  bnb: {
+  [EPaymentMethod.BNB]: {
     icon: binanceIcon,
     title: 'BNB',
     showTitle: false,
     width: 77,
     height: 16
   },
-  sepa: {
-    icon: cardIcon,
-    title: 'SEPA',
-    showTitle: true,
-    width: 28,
-    height: 20
+  [EPaymentMethod.USDC_TRC20]: {
+    icon: usdcIcon,
+    title: 'USDC TRC-20',
+    showTitle: false,
+    width: 75,
+    height: 36
   },
-  paypal: {
-    icon: cardIcon,
-    title: 'PayPal',
-    showTitle: true,
-    width: 28,
-    height: 20
+  [EPaymentMethod.BTC]: {
+    icon: bitcoinIcon,
+    title: 'Bitcoin',
+    showTitle: false,
+    width: 77,
+    height: 18
   },
-  qiwi: {
-    icon: cardIcon,
-    title: 'QIWI',
-    showTitle: true,
-    width: 28,
-    height: 20
+  [EPaymentMethod.ETH]: {
+    icon: ethereumIcon,
+    title: 'Ethereum',
+    showTitle: false,
+    width: 77,
+    height: 21
   },
-  yandex_money: {
+  [EPaymentMethod.SOLANA]: {
+    icon: solanaIcon,
+    title: 'Solana',
+    showTitle: false,
+    width: 77,
+    height: 21
+  },
+  [EPaymentMethod.TON]: {
+    icon: tonIcon,
+    title: 'TON',
+    showTitle: false,
+    width: 70,
+    height: 30
+  },
+  [EPaymentMethod.USDT_ERC20]: {
+    icon: usdtErcIcon,
+    title: 'USDT ERC-20',
+    showTitle: false,
+    width: 75,
+    height: 36
+  },
+  [EPaymentMethod.INSKINS]: {
     icon: inskinsIcon,
-    title: 'ЮMoney',
+    title: 'INSKINS',
     showTitle: false,
     width: 77,
     height: 32
   }
 }
 
-export type PaymentMethodId = TPaymentMethod
+export type PaymentMethodId = EPaymentMethod
 
 interface IPaymentCardProps {
   methodId: PaymentMethodId
@@ -183,13 +148,13 @@ export const PaymentCard = ({
 
 // Экспорт доступных методов для использования (основные методы для UI)
 export const PAYMENT_METHODS: PaymentMethodId[] = [
-  'card_ru',
-  'sbp',
-  'usdt_trc20',
-  'usdt_erc20',
-  'btc',
-  'eth',
-  'sol',
-  'ton',
-  'bnb'
+  EPaymentMethod.CARD,
+  EPaymentMethod.SBP,
+  EPaymentMethod.USDT_TRC20,
+  EPaymentMethod.USDT_ERC20,
+  EPaymentMethod.BTC,
+  EPaymentMethod.ETH,
+  EPaymentMethod.SOLANA,
+  EPaymentMethod.TON,
+  EPaymentMethod.BNB
 ] as const

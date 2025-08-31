@@ -10,6 +10,7 @@ import {
 import { Button } from '../../ui/Button/Button'
 import { ISkinItem } from '@/types/skin'
 import { getDeclination } from '@/utils/getDeclination'
+import { EPaymentMethod } from '@/api/users/types'
 import Link from 'next/link'
 import { PaymentForm } from './PaymentForm'
 import styles from './PaymentSidebar.module.scss'
@@ -42,7 +43,7 @@ const currencies = [
 
 export const PaymentSidebar = ({
   selectedSkins = [],
-  selectedPaymentMethod = 'sbp',
+  selectedPaymentMethod = EPaymentMethod.SBP,
   onPaymentMethodChange,
   onProceed,
   currency = 'RUB'

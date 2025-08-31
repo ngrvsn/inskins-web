@@ -15,6 +15,7 @@ import InfoSection from '@/components/Sell/InfoSection/InfoSection'
 import { ISkinItem } from '@/types/skin'
 import { useAuth } from '@/hooks/useAuth'
 import { type PaymentMethodId } from '@/components/ui/PaymentCard/PaymentCard'
+import { EPaymentMethod } from '@/api/users/types'
 import styles from './page.module.scss'
 
 export default function SellPage() {
@@ -22,7 +23,7 @@ export default function SellPage() {
   const [steamLink, setSteamLink] = useState<string>('')
   const [selectedSkins, setSelectedSkins] = useState<ISkinItem[]>([])
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethodId>('sbp')
+    useState<PaymentMethodId>(EPaymentMethod.SBP)
 
   const breadcrumbItems = [{ label: 'Продать скины' }]
 

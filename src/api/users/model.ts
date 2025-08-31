@@ -1,7 +1,6 @@
 // API методы для работы с пользователями
 
 import { IUserMeData } from '../auth'
-import { IUserMeData } from '../auth'
 import { privateApi } from '../config'
 import type {
   IInventoryResponse,

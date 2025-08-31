@@ -1,4 +1,6 @@
 // Интерфейсы для API авторизации
+// ВНИМАНИЕ: Эти типы используются ТОЛЬКО для авторизации пользователя
+// Для получения полных данных профиля используйте типы из src/api/users/types.ts
 
 export interface ISteamAuthResponse {
   success: boolean
@@ -24,6 +26,8 @@ export interface ICallbackResponse {
 }
 
 // Данные пользователя из /api/auth/me
+// ВНИМАНИЕ: Это базовые данные ТОЛЬКО для авторизации
+// Для полных данных профиля используйте IUserMeData из src/api/users/types.ts
 export interface IUserMeData {
   id: string
   steamId: string
