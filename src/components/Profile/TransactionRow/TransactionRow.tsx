@@ -1,59 +1,53 @@
 'use client'
 
 import { useState } from 'react'
-import { IUserTransaction, EPaymentMethod } from '@/api/users/types'
+import { IOrder, TOrderStatus, TOrderPaymentMethod } from '@/api/orders/types'
 import { TransactionDetails } from '../TransactionDetails/TransactionDetails'
 import Image from 'next/image'
 import dropdownIcon from '@/assets/icons/white-dropdown-arrow.svg'
 import styles from './TransactionRow.module.scss'
 
 interface ITransactionRowProps {
-  transaction: IUserTransaction
+  order: IOrder
 }
 
-export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
+export const TransactionRow = ({ order }: ITransactionRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
-
-  // Показываем только продажи скинов
-  if (transaction.type !== 'order_payout') {
-    return null
-  }
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded)
   }
 
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'order_payout':
-        return 'Продажа скинов'
-      default:
-        return type
-    }
+  const getTypeLabel = () => {
+    return 'Продажа скинов'
   }
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: TOrderStatus) => {
     switch (status) {
-      case 'completed':
+      case 'paid':
         return 'Завершено'
-      case 'cancelled':
+      case 'declined':
+      case 'withdrawn':
+      case 'stopped':
         return 'Отменено'
-      case 'pending':
+      case 'created':
+      case 'received':
         return 'В обработке'
-      case 'failed':
-        return 'Ошибка'
       default:
         return status
     }
   }
 
-  const getStatusClass = (status: string) => {
+  const getStatusClass = (status: TOrderStatus) => {
     switch (status) {
-      case 'completed':
+      case 'paid':
         return styles.statusCompleted
-      case 'cancelled':
+      case 'declined':
+      case 'withdrawn':
+      case 'stopped':
         return styles.statusCancelled
-      case 'pending':
+      case 'created':
+      case 'received':
         return styles.statusPending
       default:
         return ''
@@ -75,61 +69,51 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
     return `${amount.toFixed(2)} ${currency}`
   }
 
-  const getPaymentMethodLabel = (method?: EPaymentMethod | string) => {
-    if (!method) return 'Не указан'
-
+  const getPaymentMethodLabel = (method: TOrderPaymentMethod) => {
     switch (method) {
-      case EPaymentMethod.CARD:
+      case 'card_ru':
+      case 'card_visa':
+      case 'card_mastercard':
         return 'Банковская карта'
-      case EPaymentMethod.SBP:
+      case 'sbp':
         return 'СБП'
-      case EPaymentMethod.USDT_TRC20:
+      case 'usdt_trc20':
         return 'USDT TRC20'
-      case EPaymentMethod.BNB:
-        return 'BNB'
-      case EPaymentMethod.USDC_TRC20:
-        return 'USDC TRC20'
-      case EPaymentMethod.BTC:
-        return 'Bitcoin'
-      case EPaymentMethod.ETH:
-        return 'Ethereum'
-      case EPaymentMethod.SOLANA:
-        return 'Solana'
-      case EPaymentMethod.TON:
-        return 'TON'
-      case EPaymentMethod.USDT_ERC20:
+      case 'usdt_erc20':
         return 'USDT ERC20'
-      case EPaymentMethod.INSKINS:
-        return 'INSKINS'
+      case 'usdt_bsc':
+        return 'USDT BSC'
+      case 'bnb':
+        return 'BNB'
+      case 'btc':
+        return 'Bitcoin'
+      case 'eth':
+        return 'Ethereum'
+      case 'sol':
+        return 'Solana'
+      case 'ton':
+        return 'TON'
+      case 'sepa':
+        return 'SEPA'
+      case 'paypal':
+        return 'PayPal'
+      case 'qiwi':
+        return 'Qiwi'
+      case 'yandex_money':
+        return 'ЮMoney'
       default:
         return method
     }
   }
 
-  const getDestination = (type: string, method?: string) => {
-    switch (type) {
-      case 'order_payout':
-        return getPaymentMethodLabel(method)
-      case 'deposit':
-        return 'Баланс INSKINS'
-      case 'withdrawal':
-        return getPaymentMethodLabel(method)
-      case 'purchase':
-        return 'Инвентарь Steam'
-      default:
-        return 'Не указано'
-    }
+  const getDestination = (method: TOrderPaymentMethod) => {
+    return getPaymentMethodLabel(method)
   }
 
-  const getBalanceChange = (type: string, amount: number) => {
-    const isPositive = [
-      'deposit',
-      'order_payout',
-      'referral_reward',
-      'promo_bonus'
-    ].includes(type)
-    const change = isPositive ? amount : -amount
-    const sign = change >= 0 ? '+' : ''
+  const getBalanceChange = (amount: number, status: TOrderStatus) => {
+    // Для заказов продажи скинов - это всегда положительное изменение баланса (если заказ оплачен)
+    const change = status === 'paid' ? amount : 0
+    const sign = change > 0 ? '+' : ''
     return `${sign}${change.toFixed(2)}`
   }
 
@@ -140,7 +124,7 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
           <div className={styles.typeWithExpand}>
             <div className={styles.typeInfo}>
               <div className={styles.type}>
-                {getTypeLabel(transaction.type)}
+                {getTypeLabel()}
                 <Image
                   src={dropdownIcon}
                   alt='dropdown'
@@ -151,61 +135,49 @@ export const TransactionRow = ({ transaction }: ITransactionRowProps) => {
                   }`}
                 />
               </div>
-              <div className={styles.date}>
-                {formatDate(transaction.createdAt)}
-              </div>
+              <div className={styles.date}>{formatDate(order.createdAt)}</div>
             </div>
           </div>
         </div>
         <div className={styles.cell}>
-          <span className={styles.transactionId}>{transaction.id}</span>
+          <span className={styles.transactionId}>#{order.orderNumber}</span>
         </div>
         <div className={styles.cell}>
           <div
-            className={`${styles.statusTag} ${getStatusClass(
-              transaction.status
-            )}`}
+            className={`${styles.statusTag} ${getStatusClass(order.status)}`}
           >
             <span className={styles.statusText}>
-              {getStatusLabel(transaction.status)}
+              {getStatusLabel(order.status)}
             </span>
           </div>
         </div>
         <div className={styles.cell}>
           <span className={styles.amount}>
-            {formatAmount(transaction.amount, transaction.currency)}
+            {formatAmount(order.payoutAmount, 'RUB')}
           </span>
         </div>
         <div className={styles.cell}>
           <span className={styles.paymentSystem}>
-            {getPaymentMethodLabel(transaction.method)}
+            {getPaymentMethodLabel(order.paymentMethod)}
           </span>
         </div>
         <div className={styles.cell}>
           <span className={styles.destination}>
-            {getDestination(transaction.type, transaction.method)}
+            {getDestination(order.paymentMethod)}
           </span>
         </div>
         <div className={styles.cell}>
           <span
             className={`${styles.balanceChange} ${
-              [
-                'deposit',
-                'order_payout',
-                'referral_reward',
-                'promo_bonus'
-              ].includes(transaction.type)
-                ? styles.positive
-                : styles.negative
+              order.status === 'paid' ? styles.positive : styles.neutral
             }`}
           >
-            {getBalanceChange(transaction.type, transaction.amount)}{' '}
-            {transaction.currency}
+            {getBalanceChange(order.payoutAmount, order.status)} RUB
           </span>
         </div>
       </div>
 
-      {isExpanded && <TransactionDetails transaction={transaction} />}
+      {isExpanded && <TransactionDetails order={order} />}
     </>
   )
 }
