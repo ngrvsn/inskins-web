@@ -33,7 +33,9 @@
   border-radius: 14px;
   padding: 4px;
   gap: 4px;
-}
+  @media (max-width: 1150px) {
+    flex-direction: column;
+}}
 
 .actionButton {
   padding: 8px 16px;
@@ -64,7 +66,10 @@
   border-radius: 14px;
   padding: 4px;
   gap: 4px;
-}
+  @media (max-width: 1150px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}}
 
 .navItem {
   padding: 8px 16px;
@@ -92,6 +97,14 @@
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  @media (max-width: 1150px) {
+    flex-direction: column-reverse;
+    align-items: normal;
+  }
+  @media (max-width: 900px) {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .currencyButton {
@@ -159,6 +172,10 @@
   &:hover {
     background: rgba(73, 170, 25, 0.1);
   }
+}
+
+.cartText {
+  display: inline;
 }
 
 .loadingContainer {
@@ -335,5 +352,64 @@
 
   &:hover {
     background: #3d8f15;
+  }
+}
+
+// Мобильные элементы управления
+.mobileControls {
+  display: none;
+  align-items: center;
+}
+
+.mobileMenuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid #333;
+  background: rgba(19, 20, 25, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #555;
+    background: rgba(19, 20, 25, 0.8);
+  }
+}
+
+// Медиа-запросы для мобильной адаптации
+@media (max-width: 900px) {
+  .actionButtons,
+  .navigation {
+    display: none;
+  }
+
+  .mobileControls {
+    display: flex;
+  }
+
+  .cartText {
+    display: none;
+  }
+
+  .cartButton {
+    width: 44px;
+    padding: 0;
+
+    span {
+      display: none;
+    }
+  }
+
+  .profileButton {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .mobileControls {
+    display: none;
   }
 }

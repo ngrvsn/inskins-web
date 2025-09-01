@@ -100,7 +100,7 @@ export const PendingConfirmation: FC<IPendingConfirmationProps> = ({
           <div className={styles.botInfoRow}>
             <span className={styles.botInfoLabel}>АВАТАР:</span>
             <div className={styles.botAvatar}>
-              <img src={botInfo.avatar} alt={`Бот ${botInfo.name}`} />
+              <Image src={botInfo.avatar} alt={`Бот ${botInfo.name}`} />
             </div>
           </div>
         </div>

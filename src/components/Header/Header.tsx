@@ -10,6 +10,9 @@ import dropdownIcon from '@/assets/icons/icon-dropdown.svg'
 import cartIcon from '@/assets/icons/cart.svg'
 import { CurrencySelector, SteamLoginButton, Spinner } from '@/components/ui'
 import { BalanceModal } from '@/components/BalanceModal/BalanceModal'
+import MobileMenu from './MobileMenu/MobileMenu'
+import MobileMenuOverlay from './MobileMenuOverlay/MobileMenuOverlay'
+import mobileMenuIcon from '@/assets/icons/mobile-menu.svg'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 
@@ -24,11 +27,12 @@ export const Header = () => {
     refreshProfile
   } = useProfile()
 
-  const [activeTab, setActiveTab] = useState('buy') // 'buy' или 'sell'
+  const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy') // 'buy' или 'sell'
   const [activeNavItem, setActiveNavItem] = useState('main') // 'main', 'market', 'blog', 'faq'
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false) // состояние выпадающего меню
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false) // модалка пополнения
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false) // модалка вывода
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false) // состояние мобильного меню
 
   const profileRef = useRef<HTMLDivElement>(null)
 
@@ -94,6 +98,44 @@ export const Header = () => {
   const handleSellClick = () => {
     setActiveTab('sell')
     router.push('/sell')
+  }
+
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const handleMobileMenuClose = () => {
+    setIsMobileMenuOpen(false)
+  }
+
+  const handleMobileDepositClick = () => {
+    setIsDepositModalOpen(true)
+    setIsMobileMenuOpen(false)
+  }
+
+  const handleMobileWithdrawClick = () => {
+    setIsWithdrawModalOpen(true)
+    setIsMobileMenuOpen(false)
+  }
+
+  const handleMobileProfileClick = () => {
+    router.push('/profile')
+    setIsMobileMenuOpen(false)
+  }
+
+  const handleMobileLogout = async () => {
+    try {
+      await logout()
+      setIsMobileMenuOpen(false)
+    } catch (error) {
+      console.error('Ошибка выхода из системы:', error)
+      setIsMobileMenuOpen(false)
+    }
+  }
+
+  const handleMobileLogin = () => {
+    // Логика входа через Steam будет обработана в SteamLoginButton
+    setIsMobileMenuOpen(false)
   }
 
   // Определяем активную вкладку на основе текущего пути
@@ -205,9 +247,21 @@ export const Header = () => {
           ) : isAuthenticated ? (
             <button className={styles.cartButton}>
               <Image src={cartIcon} alt='Корзина' width={16} height={16} />
-              КОРЗИНА
+              <span className={styles.cartText}>КОРЗИНА</span>
             </button>
           ) : null}
+
+          {/* Мобильные элементы управления */}
+          <div className={styles.mobileControls}>
+            {/* Кнопка мобильного меню */}
+            <button
+              className={styles.mobileMenuButton}
+              onClick={handleMobileMenuToggle}
+              aria-label='Открыть мобильное меню'
+            >
+              <Image src={mobileMenuIcon} alt='Меню' width={25} height={25} />
+            </button>
+          </div>
 
           {/* Кнопка входа через Steam, состояние загрузки или профиль пользователя */}
           {isLoading ? (
@@ -322,6 +376,31 @@ export const Header = () => {
           )}
         </div>
       </div>
+
+      {/* Мобильное меню и оверлей */}
+      <MobileMenuOverlay
+        isVisible={isMobileMenuOpen}
+        onClick={handleMobileMenuClose}
+      />
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={handleMobileMenuClose}
+        isAuthenticated={isAuthenticated}
+        profileData={profileData || undefined}
+        profileError={profileError || undefined}
+        isProfileLoading={profileLoading}
+        onLogout={handleMobileLogout}
+        onDepositClick={handleMobileDepositClick}
+        onWithdrawClick={handleMobileWithdrawClick}
+        onProfileClick={handleMobileProfileClick}
+        onInventoryClick={() => {}} // Заглушка для инвентаря
+        onReferralClick={() => {}} // Заглушка для реферальной программы
+        onRetryProfile={handleRetryProfile}
+        activeTab={activeTab}
+        activeNavItem={activeNavItem}
+        onTabChange={setActiveTab}
+        onNavItemChange={setActiveNavItem}
+      />
 
       {/* Модалки баланса */}
       <BalanceModal

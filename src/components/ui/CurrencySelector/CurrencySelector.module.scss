@@ -104,3 +104,27 @@
     transform: translateY(0);
   }
 }
+
+// Адаптация для мобильного меню
+.currencySelector {
+  // Компактный размер для мобильного меню
+  .trigger {
+    min-width: 0;
+    flex: 1;
+    justify-content: center;
+    padding: 10px 8px;
+    font-size: 13px;
+
+    .symbol {
+      font-size: 14px;
+    }
+
+    .code {
+      font-size: 13px;
+    }
+  }
+
+  .dropdown {
+    min-width: 100px;
+  }
+}

@@ -39,79 +39,6 @@ interface IFilterState {
   selectedSkins: string[]
 }
 
-// Мок данные для демонстрации (показываются только если нет Steam ссылки)
-const mockSkins: ISkinItem[] = [
-  {
-    id: '1',
-    title: 'AK-47 | Redline',
-    price: 2450,
-    image: mockCard,
-    badge: 'FT',
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '2',
-    title: 'AWP | Dragon Lore',
-    price: 125000,
-    image: mockCard,
-    badge: 'MW',
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '3',
-    title: 'M4A4 | Howl',
-    price: 45600,
-    image: mockCard,
-    badge: 'FN',
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '4',
-    title: 'Karambit | Fade',
-    price: 89200,
-    image: mockCard,
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '5',
-    title: 'Glock-18 | Water Elemental',
-    price: 850,
-    image: mockCard,
-    badge: 'ST™',
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '6',
-    title: 'USP-S | Kill Confirmed',
-    price: 3200,
-    image: mockCard,
-    badge: 'MW',
-    status: 'available',
-    game: 'csgo'
-  },
-  {
-    id: '7',
-    title: 'Rust Skin Example',
-    price: 1500,
-    image: mockCard,
-    status: 'available',
-    game: 'rust'
-  },
-  {
-    id: '8',
-    title: 'Dota 2 Item Example',
-    price: 5000,
-    image: mockCard,
-    status: 'available',
-    game: 'dota2'
-  }
-]
-
 const gameOptions = [
   { value: '730', label: 'CS2' },
   { value: '252490', label: 'Rust' },
@@ -175,13 +102,8 @@ export const SkinsGrid = ({
     onSelectionChange([])
   }, [inventoryData, selectedGameId]) // Убираем onSelectionChange из зависимостей
 
-  // Получаем скины из API данных или используем мок данные
+  // Получаем скины из API данных
   const allSkins = useMemo(() => {
-    // Если есть Steam ссылка, но нет данных инвентаря - не показываем мок данные
-    if (steamLink && !inventoryData) {
-      return []
-    }
-
     // Если есть данные инвентаря, маппим их в ISkinItem
     if (inventoryData && inventoryData.items.length > 0) {
       return inventoryData.items
@@ -189,13 +111,8 @@ export const SkinsGrid = ({
         .filter((skin) => skin.price > 0) // Показываем только скины с ценой
     }
 
-    // Если нет Steam ссылки, показываем мок данные для демонстрации
-    if (!steamLink) {
-      return mockSkins
-    }
-
     return []
-  }, [inventoryData, steamLink])
+  }, [inventoryData])
 
   // Фильтрация и сортировка скинов
   const filteredSkins = useMemo(() => {
@@ -329,6 +246,10 @@ export const SkinsGrid = ({
           <div className={styles.authPrompt}>
             <AuthPrompt />
           </div>
+        ) : !steamLink ? (
+          <div className={styles.noLinkContainer}>
+            <p className={styles.noLinkText}>Вставьте ссылку</p>
+          </div>
         ) : isLoading ? (
           <div className={styles.loadingContainer}>
             <Spinner size='large' color='green' />
@@ -338,19 +259,19 @@ export const SkinsGrid = ({
           <div className={styles.errorContainer}>
             <p className={styles.errorText}>{inventoryError}</p>
           </div>
-        ) : steamLink && inventoryData && inventoryData.items.length === 0 ? (
+        ) : inventoryData && inventoryData.items.length === 0 ? (
           <div className={styles.emptyInventory}>
             <p className={styles.emptyText}>
               Инвентарь пуст или не содержит предметов для продажи
             </p>
           </div>
-        ) : steamLink && !inventoryData && !isLoading ? (
+        ) : !inventoryData ? (
           <div className={styles.noInventoryData}>
             <p className={styles.noInventoryText}>
               Введите корректную ссылку на обмен Steam для загрузки инвентаря
             </p>
           </div>
-        ) : filteredSkins.length === 0 && (steamLink || allSkins.length > 0) ? (
+        ) : filteredSkins.length === 0 ? (
           <div className={styles.noResults}>
             <p className={styles.noResultsText}>
               Не найдено предметов по заданным фильтрам
